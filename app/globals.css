@@ -121,5 +121,28 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* background: linear-gradient(
+      to bottom right,
+      rgba(13, 14, 20, 1) 0%,
+      rgba(17, 19, 31, 1) 100%
+    ); */
+    /* min-height: 100vh; */
   }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }

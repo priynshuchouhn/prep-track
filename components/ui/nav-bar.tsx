@@ -1,4 +1,4 @@
-import { GraduationCap } from 'lucide-react'
+import { GraduationCap, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './button'
@@ -11,7 +11,10 @@ function Navbar({isHomePage = false}: {isHomePage?:boolean}) {
     <header className="sticky p-2 top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex justify-center">
     <div className="container flex h-16 items-center justify-between">
       <Link href="/" className="flex items-center gap-2">
-        <GraduationCap className="h-6 w-6" />
+      <div className="relative">
+              <GraduationCap className="h-8 w-8" />
+              <Sparkles className="h-4 w-4 absolute -top-1 -right-2 text-yellow-800 animate-pulse" />
+            </div>
         <span className="font-bold">Prep Track</span>
       </Link>
       {isHomePage ? 
