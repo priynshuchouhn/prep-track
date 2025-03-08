@@ -12,6 +12,7 @@ import ColourfulText from '@/components/ui/colourful-text'
 import { FloatingCard } from '@/components/ui/floating-card'
 import { GridPattern } from '@/components/ui/grid-pattern'
 import { HoverCard } from '@/components/ui/hover-card'
+import Navbar from '@/components/ui/nav-bar'
 import { SpotlightButton } from '@/components/ui/spotlight-button'
 import { TextReveal } from '@/components/ui/text-reveal'
 import { leaderboardUsers, people, recentPosts } from '@/lib/data'
@@ -58,20 +59,7 @@ function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Navbar */}
-      <header className="sticky p-2 top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex justify-center">
-        <div className="container flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <GraduationCap className="h-6 w-6" />
-            <span className="font-bold">Prep Track</span>
-          </Link>
-          <nav className="flex gap-4">
-            <Button variant="outline" size="sm">
-              Login
-            </Button>
-            <SpotlightButton size="sm">Sign Up</SpotlightButton>
-          </nav>
-        </div>
-      </header>
+        <Navbar/>
 
       <main className="flex-1 justify-center px-2 lg:px-0">
         {/* Hero Section with Aceternity UI inspired background */}
