@@ -10,32 +10,6 @@ import Navbar from "@/components/ui/nav-bar";
 import CreatePostForm from "@/components/ui/create-post-form";
 import Feed from "@/components/ui/feed";
 
-const dummyPosts = [
-  {
-    id: 1,
-    user: {
-      name: "Sarah Chen",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100",
-      badge: "DSA Expert",
-    },
-    content: "Just completed my DSA practice for today! Making progress on binary trees 🌳\n\nKey learnings:\n- Tree traversal algorithms\n- Balanced vs unbalanced trees\n- Time complexity analysis",
-    likes: 24,
-    comments: 5,
-    timestamp: "2 hours ago",
-  },
-  {
-    id: 2,
-    user: {
-      name: "Alex Kumar",
-      avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=100",
-      badge: "System Design Pro",
-    },
-    content: "Finished system design chapter on distributed systems! 🚀\n\nKey points covered:\n- CAP theorem\n- Load balancing strategies\n- Database sharding",
-    likes: 32,
-    comments: 8,
-    timestamp: "3 hours ago",
-  },
-];
 
 const trendingTopics = [
   "System Design",
@@ -85,11 +59,11 @@ export default function HomePage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div className="p-3 bg-muted rounded-lg">
-                    <div className="font-semibold">45</div>
+                    <div className="font-semibold">0</div>
                     <div className="text-sm text-muted-foreground">Posts</div>
                   </div>
                   <div className="p-3 bg-muted rounded-lg">
-                    <div className="font-semibold">128</div>
+                    <div className="font-semibold">0</div>
                     <div className="text-sm text-muted-foreground">Following</div>
                   </div>
                 </div>

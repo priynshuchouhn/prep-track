@@ -1,6 +1,18 @@
 
-import NextAuth from "next-auth"
+import NextAuth, { DefaultSession, } from "next-auth";
 import Credentials from "next-auth/providers/credentials"
+import prisma from '@/lib/prisma'
+import bcrypt from "bcryptjs"
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      role: string; // Add the role field here
+    } & DefaultSession["user"];
+  }
+}
+
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -10,17 +22,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        // This is where you would typically verify the user credentials
-        // against your database
-        if (credentials?.email === "user@example.com" && credentials?.password === "password") {
-          return {
-            id: "1",
-            name: "John Doe",
-            email: "user@example.com",
-            image: "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
-          };
+        if (!credentials?.email || !credentials?.password) return null;
+
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email as string }
+        });
+        if (!user) {
+          console.log("User not found");
+          return null;
         }
-        return null;
+        const passwordMatch = await bcrypt.compare(credentials.password as string, user.password);
+        if (!passwordMatch) {
+          console.log("Invalid password");
+          return null;
+        }
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image || null,
+          role: user.role
+        };
       }
     })
   ],
@@ -37,6 +59,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.role = token.role as string
       }
       return session;
     },

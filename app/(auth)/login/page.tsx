@@ -33,28 +33,32 @@ const formSchema = z.object({
 export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [isLoading,setIsLoading] = useState<boolean>(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "user@example.com",
-      password: "password",
+      email: "alice@tims.edu",
+      password: "password123",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      setIsLoading(true);
       const result = await signIn("credentials", {
         email: values.email,
         password: values.password,
         redirect: false,
       });
       if (result?.error) {
+        setIsLoading(false);
         setError("Invalid email or password");
         return;
       }
       router.push("/");
     } catch (error) {
+      setIsLoading(false);
       setError("An error occurred. Please try again.");
     }
   }
@@ -137,10 +141,11 @@ export default function LoginPage() {
                 )}
 
                 <Button
+                disabled={isLoading}
                   type="submit"
                   className="w-full font-semibold bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
                 >
-                  Sign In
+                  {isLoading ? 'Signing in...' :'Sign In'}
                 </Button>
               </form>
             </Form>
