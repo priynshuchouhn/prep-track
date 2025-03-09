@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Bell } from "lucide-react";
 import { Button } from "./button";
+import clsx from "clsx";
 
 
 export default function Notifications() {
@@ -72,7 +73,7 @@ export default function Notifications() {
                 <DropdownMenuTrigger>
                     <div className="relative">
                     <Bell className="h-6 w-6" />
-                    {notifications.length > 0 && <div className="absolute w-5 h-5 flex items-center text-xs -top-2 -right-2 justify-center text-white bg-sky-700 rounded-full">{notifications.length}</div>}
+                    {notifications.filter(el => el.read != true) && notifications.filter(el => el.read != true).length > 0 && <div className="absolute w-5 h-5 flex items-center text-xs -top-2 -right-2 justify-center text-white bg-sky-700 rounded-full">{notifications.filter(el => el.read != true).length}</div>}
                     </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="min-w-md">
@@ -88,8 +89,8 @@ export default function Notifications() {
                     {notifications.length > 0 ? (
                         <>
                             {notifications.map((notification) => (
-                                <DropdownMenuItem key={notification.id}>
-                                    {notification.message}
+                                <DropdownMenuItem key={notification.id} className={clsx(!notification.read && 'bg-sky-50')}>
+                                    <span className={clsx(!notification.read && 'font-semibold')}>{notification.message}</span>
                                 </DropdownMenuItem>
                             ))}
                         </>
