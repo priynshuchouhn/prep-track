@@ -1,15 +1,18 @@
 
-import NextAuth, { DefaultSession, } from "next-auth";
+import NextAuth, { DefaultSession, User, } from "next-auth";
 import Credentials from "next-auth/providers/credentials"
 import prisma from '@/lib/prisma'
 import bcrypt from "bcryptjs"
 
 declare module "next-auth" {
+  interface User {
+    id?: string;
+    role: string;
+    postCount:number,
+    currentStreak:number
+  }
   interface Session {
-    user: {
-      id: string;
-      role: string; // Add the role field here
-    } & DefaultSession["user"];
+    user: User & DefaultSession["user"];
   }
 }
 
@@ -25,7 +28,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!credentials?.email || !credentials?.password) return null;
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string }
+          where: { email: credentials.email as string },
+          include: {Leaderboard: true, Streak:true}
         });
         if (!user) {
           console.log("User not found");
@@ -41,8 +45,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           name: user.name,
           email: user.email,
           image: user.image || null,
-          role: user.role
-        };
+          role: user.role,
+          postCount: user.Leaderboard?.postCount || 0,
+          currentStreak: user.Streak?.currentStreak || 0
+        } as User;
       }
     })
   ],
@@ -53,6 +59,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role;
+        token.postCount = user.postCount;
+        token.streak = user.currentStreak;
       }
       return token;
     },
@@ -60,29 +69,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string
+        session.user.postCount = token.postCount as number
+        session.user.currentStreak = token.streak as number
       }
       return session;
     },
   },
 })
 
-// CredentialsProvider({
-//   name: "Credentials",
-//   credentials: {
-//     email: { label: "Email", type: "email" },
-//     password: { label: "Password", type: "password" }
-//   },
-//   async authorize(credentials) {
-//     // This is where you would typically verify the user credentials
-//     // against your database
-//     if (credentials?.email === "user@example.com" && credentials?.password === "password") {
-//       return {
-//         id: "1",
-//         name: "John Doe",
-//         email: "user@example.com",
-//         image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100"
-//       };
-//     }
-//     return null;
-//   }
-// })

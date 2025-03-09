@@ -55,12 +55,12 @@ export default async function HomePage() {
                   </Avatar>
                   <div>
                     <div className="font-semibold">{session?.user.name}</div>
-                    <div className="text-sm text-muted-foreground">🔥 15 day streak</div>
+                    <div className="text-sm text-muted-foreground">🔥 {session?.user.currentStreak} day streak</div>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div className="p-3 bg-muted rounded-lg">
-                    <div className="font-semibold">0</div>
+                    <div className="font-semibold">{session?.user.postCount}</div>
                     <div className="text-sm text-muted-foreground">Posts</div>
                   </div>
                   <div className="p-3 bg-muted rounded-lg">
