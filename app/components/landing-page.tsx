@@ -87,11 +87,13 @@ function LandingPage() {
                   <SpotlightButton size="lg" className="px-8">
                     Start Posting
                   </SpotlightButton>
+                  <div className='hidden md:block'>
                   <ExpandableButton cardContent={learnMoreButtonContent}>
-                  <Button variant="outline" size="lg">
-                    Learn More
-                  </Button>
-                </ExpandableButton>
+                    <Button variant="outline" size="lg">
+                      Learn More
+                    </Button>
+                  </ExpandableButton>
+                  </div>
                 </div>
 
                 <div className="mt-8 flex items-center gap-5">
