@@ -21,6 +21,8 @@ export async function GET(req: NextRequest) {
                         password: false
                     }
                 },
+                Like:true,
+                Comment: true
             }
         });
         return NextResponse.json(posts);
