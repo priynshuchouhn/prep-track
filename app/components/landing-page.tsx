@@ -260,7 +260,7 @@ function LandingPage() {
           <div className="container relative z-10 text-center">
             <TextReveal>
               <h2 className="text-3xl font-bold tracking-tighter mb-4 text-primary-foreground">
-                Ready to start your <AuroraText>Placement</AuroraText> journey?
+                Ready to start your <AuroraText className='hidden md:inline-block'>Placement</AuroraText> <ColourfulText text='Placement' className="inline-block md:hidden"/> journey?
               </h2>
             </TextReveal>
             <TextReveal>

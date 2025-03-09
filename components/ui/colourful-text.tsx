@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
 import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
 
-export default function ColourfulText({ text }: { text: string }) {
+export default function ColourfulText({ text, className }: { text: string, className?:string }) {
   const colors = [
     "rgb(131, 179, 32)",
     "rgb(47, 195, 106)",
@@ -46,7 +47,7 @@ export default function ColourfulText({ text }: { text: string }) {
         duration: 0.5,
         delay: index * 0.05,
       }}
-      className="inline-block whitespace-pre font-sans tracking-tight"
+      className={cn("inline-block whitespace-pre font-sans tracking-tight", className)}
     >
       {char}
     </motion.span>

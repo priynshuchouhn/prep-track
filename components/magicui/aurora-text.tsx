@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import type { CSSProperties } from "react";
 import React, { useEffect, useRef } from "react";
 
@@ -146,7 +147,7 @@ export function AuroraText({
   return (
     <span
       ref={containerRef}
-      className={`relative inline-block align-middle ${className}`}
+      className={cn(`relative inline-block align-middle`,className)}
       style={{
         width: dimensions.width || "auto",
         height: dimensions.height || "auto",
