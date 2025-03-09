@@ -3,6 +3,8 @@ import { Home, Search, PlusCircle, Bell, User } from "lucide-react";
 import Link from "next/link";
 
 async function Footer() {
+    const session = await auth()
+    if(!session) return null;
     return (
         <div className="bg-white fixed bottom-0 lg:hidden flex items-center justify-around p-3 w-full shadow-md shadow-gray-900 border-t border-gray-300">
             <Link href="/">
