@@ -8,7 +8,7 @@ interface CustomNextApiResponse extends NextApiResponse {
   };
 }
 
-export default function GET(req: NextApiRequest, res: CustomNextApiResponse) {
+export async function GET(req: NextApiRequest, res: CustomNextApiResponse) {
   if (!res.socket.server.io) {
     console.log("Starting WebSocket server...");
 
