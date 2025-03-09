@@ -23,10 +23,14 @@ function Navbar({isHomePage = false}: {isHomePage?:boolean}) {
           <Image src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100" alt="User" width={500} height={500} className="object-cover" />
         </Avatar>
       </div> :   <nav className="flex gap-4">
+        <Link href={'/login'}>
         <Button variant="outline" size="sm">
           Login
         </Button>
+        </Link>
+        <Link href={'/register'}>
         <SpotlightButton size="sm">Sign Up</SpotlightButton>
+        </Link>
       </nav>
     }
     </div>

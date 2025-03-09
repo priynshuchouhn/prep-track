@@ -1,4 +1,5 @@
 'use client'
+import { ExpandableButton } from '@/components/expandable-button'
 import { AuroraText } from '@/components/magicui/aurora-text'
 import { MagicCard } from '@/components/magicui/magic-card'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
@@ -23,14 +24,14 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 function LandingPage() {
-    const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
-    useEffect(() => {
-      setMounted(true)
-  
-      // Add grid pattern style
-      const style = document.createElement("style")
-      style.innerHTML = `
+  useEffect(() => {
+    setMounted(true)
+
+    // Add grid pattern style
+    const style = document.createElement("style")
+    style.innerHTML = `
         .bg-grid-pattern {
           background-size: 40px 40px;
           background-image: 
@@ -48,18 +49,18 @@ function LandingPage() {
           animation: float 6s ease-in-out infinite;
         }
       `
-      document.head.appendChild(style)
-  
-      return () => {
-        document.head.removeChild(style)
-      }
-    }, [])
-  
-    if (!mounted) return null
+    document.head.appendChild(style)
+
+    return () => {
+      document.head.removeChild(style)
+    }
+  }, [])
+
+  if (!mounted) return null
   return (
     <div className="flex min-h-screen flex-col">
       {/* Navbar */}
-        <Navbar/>
+      <Navbar />
 
       <main className="flex-1 justify-center px-2 lg:px-0">
         {/* Hero Section with Aceternity UI inspired background */}
@@ -74,7 +75,7 @@ function LandingPage() {
                 <TextReveal>
                   <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
                     Stay Consistent. <br />
-                    <ColourfulText text='Get Placed.'/>
+                    <ColourfulText text='Get Placed.' />
                   </h1>
                 </TextReveal>
                 <TextReveal>
@@ -86,15 +87,17 @@ function LandingPage() {
                   <SpotlightButton size="lg" className="px-8">
                     Start Posting
                   </SpotlightButton>
+                  <ExpandableButton cardContent={learnMoreButtonContent}>
                   <Button variant="outline" size="lg">
                     Learn More
                   </Button>
+                </ExpandableButton>
                 </div>
 
                 <div className="mt-8 flex items-center gap-5">
                   <div className="flex flex-row items-center justify-center">
                     <AnimatedTooltip items={people} />
-                    </div>
+                  </div>
                   <div className="text-sm text-muted-foreground">
                     <span className="font-medium text-foreground">
                       <AnimatedCounter value={50} />+
@@ -213,8 +216,8 @@ function LandingPage() {
           <div className="grid gap-8 md:grid-cols-3 max-w-3xl mx-auto">
             {leaderboardUsers.map((user, index) => (
               <FloatingCard key={user.id} delay={index * 200}>
-                  <Card className={`py-0 cursor-pointer`}> 
-                    {/* overflow-hidden border-2 bg-background/80 backdrop-blur-sm */}
+                <Card className={`py-0 cursor-pointer`}>
+                  {/* overflow-hidden border-2 bg-background/80 backdrop-blur-sm */}
                   <MagicCard gradientColor='#262626' gradientOpacity={0.05}>
                     <div className="p-6 text-center">
                       <div className="relative mx-auto mb-4">
@@ -226,7 +229,7 @@ function LandingPage() {
                           className={clsx(
                             'absolute -top-2 -right-2 text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm',
                             index === 0 && 'bg-yellow-500',
-                            index === 1 && 'bg-gray-400', 
+                            index === 1 && 'bg-gray-400',
                             index === 2 && 'bg-amber-700'
                           )}
                         >
@@ -244,7 +247,7 @@ function LandingPage() {
                       <p className="text-sm text-muted-foreground">{user.posts} posts this month</p>
                     </div>
                   </MagicCard>
-                  </Card>
+                </Card>
               </FloatingCard>
             ))}
           </div>
@@ -260,7 +263,7 @@ function LandingPage() {
           <div className="container relative z-10 text-center">
             <TextReveal>
               <h2 className="text-3xl font-bold tracking-tighter mb-4 text-primary-foreground">
-                Ready to start your <AuroraText className='hidden md:inline-block'>Placement</AuroraText> <ColourfulText text='Placement' className="inline-block md:hidden"/> journey?
+                Ready to start your <AuroraText className='hidden md:inline-block'>Placement</AuroraText> <ColourfulText text='Placement' className="inline-block md:hidden" /> journey?
               </h2>
             </TextReveal>
             <TextReveal>
@@ -268,9 +271,11 @@ function LandingPage() {
                 Join students who are improving their skills and getting placed.
               </p>
             </TextReveal>
-            <Button size="lg" variant="secondary" className="px-8 cursor-pointer">
-              Create Your Account
-            </Button>
+            <Link href="/register">
+              <Button size="lg" variant="secondary" className="px-8 cursor-pointer">
+                Create Your Account
+              </Button>
+            </Link>
           </div>
         </section>
       </main>
@@ -387,5 +392,44 @@ function LandingPage() {
     </div>
   )
 }
+
+const learnMoreButtonContent = {
+  title: "🚀 What is PrepTrack?",
+  ctaText: "Start Posting",
+  ctaLink: "/login",
+  content: () => {
+    return (
+      <section id="learn-more">
+        <p className='mb-3'>
+          PrepTrack is your <strong>personal placement companion</strong>, helping you stay
+          <strong> consistent, accountable, and motivated</strong> throughout your job preparation journey.
+          Whether you&apos;re mastering <strong>DSA, Web Development, AI, or Aptitude</strong>,
+          PrepTrack ensures you never fall behind.
+        </p>
+
+        <h3 className='text-xl mb-2'>📌 How It Works</h3>
+        <ul className='mb-3'>
+          <li><strong>Post Weekly Updates</strong> – Share what you&apos;re learning every week.</li>
+          <li><strong>Build a Learning Streak</strong> – Stay consistent and rank higher on the leaderboard.</li>
+          <li><strong>Get Smart Reminders</strong> – Miss three weeks? Get an email nudge to get back on track!</li>
+          <li><strong>Engage & Compete</strong> – See what your peers are learning and challenge yourself.</li>
+        </ul>
+
+        <h3 className='text-xl mb-2'>🎯 Why Use PrepTrack?</h3>
+        <ul className='mb-3'>
+          <li><strong>Stay Accountable</strong> – Never lose track of your progress.</li>
+          <li><strong>Collaborate & Learn</strong> – Gain insights from peers’ experiences.</li>
+          <li><strong>Boost Your Resume</strong> – Showcase continuous learning to recruiters.</li>
+          <li><strong>Compete & Excel</strong> – Earn badges, climb the leaderboard, and stay ahead.</li>
+        </ul>
+
+        <p>
+          👉 <strong>Start tracking your prep journey today with PrepTrack! 🚀</strong>
+        </p>
+      </section>
+
+    );
+  },
+};
 
 export default LandingPage
