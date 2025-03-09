@@ -1,22 +1,32 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-    const posts = await prisma.post.findMany({
-        include: {
-            user: {
-                select: {
-                    name:true,
-                    email:true,
-                    image:true,
-                    password: false
-                }
+export async function GET(req: NextRequest) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const limit = searchParams.get("limit") ? parseInt(searchParams.get("limit")!, 10) : 10;
+        const posts = await prisma.post.findMany({
+            take: limit,
+            orderBy: {
+                createdAt: "desc"
             },
-        }
-    });
-    return NextResponse.json(posts);
+            include: {
+                user: {
+                    select: {
+                        name: true,
+                        email: true,
+                        image: true,
+                        password: false
+                    }
+                },
+            }
+        });
+        return NextResponse.json(posts);
+    } catch (error) {
+        return NextResponse.json([]);
+    }
 }
 
 export async function POST(req: Request) {

@@ -1,29 +1,23 @@
 
 import { ExpandableButton } from '@/components/ui/expandable-button'
 import { AuroraText } from '@/components/magicui/aurora-text'
-import { MagicCard } from '@/components/magicui/magic-card'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { AnimatedTooltip } from '@/components/ui/animated-tooltip'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { BackgroundGradient } from '@/components/ui/background-gradient'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import ColourfulText from '@/components/ui/colourful-text'
-import { FloatingCard } from '@/components/ui/floating-card'
 import { GridPattern } from '@/components/ui/grid-pattern'
-import { HoverCard } from '@/components/ui/hover-card'
 import Navbar from '@/components/ui/nav-bar'
 import { SpotlightButton } from '@/components/ui/spotlight-button'
 import { TextReveal } from '@/components/ui/text-reveal'
-import { leaderboardUsers, people, recentPosts } from '@/lib/data'
-import clsx from 'clsx'
-import { BookOpen, Calendar, Github, GraduationCap, Instagram, Linkedin, MessageSquare, Trophy, Twitter } from 'lucide-react'
+import { people, } from '@/lib/data'
+import { Github, GraduationCap, Instagram, Linkedin, Trophy, Twitter } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import RecentPosts from '@/components/ui/recent-posts'
+import Leaderboard from '@/components/ui/leaderboard'
 
-function LandingPage() {
-
+async function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Navbar */}
@@ -124,50 +118,7 @@ function LandingPage() {
               <h2 className="text-3xl font-bold tracking-tight">Recent Learning Updates</h2>
               <p className="text-muted-foreground">See what other students are learning and sharing</p>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {recentPosts.map((post, index) => (
-                <FloatingCard key={post.id} delay={index * 150}>
-                  <HoverCard>
-                    <Card className="overflow-hidden h-full border border-border/50 bg-background/50 backdrop-blur-sm">
-                      <div className="p-6">
-                        <div className="flex items-center gap-4 mb-4">
-                          <Avatar>
-                            <AvatarImage src={post.user.avatar} alt={post.user.name} />
-                            <AvatarFallback>{post.user.name.substring(0, 2)}</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <div className="font-medium">{post.user.name}</div>
-                            <div className="text-sm text-muted-foreground flex items-center gap-1">
-                              <Calendar className="h-3 w-3" />
-                              {post.date}
-                            </div>
-                          </div>
-                        </div>
-                        <h3 className="font-semibold mb-2">{post.title}</h3>
-                        <p className="text-muted-foreground mb-4">{post.content}</p>
-                        <div className="flex flex-wrap gap-2">
-                          {post.tags.map((tag) => (
-                            <Badge key={tag} variant="secondary">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                        <div className="flex items-center gap-4 mt-4 text-muted-foreground text-sm">
-                          <div className="flex items-center gap-1">
-                            <MessageSquare className="h-4 w-4" />
-                            {post.comments}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <BookOpen className="h-4 w-4" />
-                            {post.reads}
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  </HoverCard>
-                </FloatingCard>
-              ))}
-            </div>
+           <RecentPosts/>
             <div className="flex justify-center mt-8">
               <SpotlightButton variant="outline">View All Posts</SpotlightButton>
             </div>
@@ -182,44 +133,7 @@ function LandingPage() {
               Students who are consistently sharing their learning journey
             </p>
           </div>
-          <div className="grid gap-8 md:grid-cols-3 max-w-3xl mx-auto">
-            {leaderboardUsers.map((user, index) => (
-              <FloatingCard key={user.id} delay={index * 200}>
-                <Card className={`py-0 cursor-pointer`}>
-                  {/* overflow-hidden border-2 bg-background/80 backdrop-blur-sm */}
-                  <MagicCard gradientColor='#262626' gradientOpacity={0.05}>
-                    <div className="p-6 text-center">
-                      <div className="relative mx-auto mb-4">
-                        <Avatar className="h-20 w-20 mx-auto">
-                          <AvatarImage src={user.avatar} alt={user.name} className='object-cover' />
-                          <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
-                        </Avatar>
-                        <div
-                          className={clsx(
-                            'absolute -top-2 -right-2 text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm',
-                            index === 0 && 'bg-yellow-500',
-                            index === 1 && 'bg-gray-400',
-                            index === 2 && 'bg-amber-700'
-                          )}
-                        >
-                          #{index + 1}
-                        </div>
-                      </div>
-                      <h3 className="font-semibold text-lg">{user.name}</h3>
-                      <p className="text-muted-foreground text-sm mb-3">Batch {user.batch}</p>
-                      <div className="flex justify-center gap-2 mb-3">
-                        <Badge variant="outline" className="flex items-center gap-1">
-                          <Trophy className="h-3 w-3" />
-                          {user.streak} day streak
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground">{user.posts} posts this month</p>
-                    </div>
-                  </MagicCard>
-                </Card>
-              </FloatingCard>
-            ))}
-          </div>
+          <Leaderboard/>
         </section>
 
         {/* CTA Section with Aceternity UI inspired background */}
@@ -367,38 +281,6 @@ const learnMoreButtonContent = {
   ctaText: "Start Posting",
   ctaLink: "/login",
   contentType: "prepTrackInfo",
-  // content: () => {
-  //   return (
-  //     <section id="learn-more">
-  //       <p className='mb-3'>
-  //         PrepTrack is your <strong>personal placement companion</strong>, helping you stay
-  //         <strong> consistent, accountable, and motivated</strong> throughout your job preparation journey.
-  //         Whether you&apos;re mastering <strong>DSA, Web Development, AI, or Aptitude</strong>,
-  //         PrepTrack ensures you never fall behind.
-  //       </p>
-
-  //       <h3 className='text-xl mb-2'>📌 How It Works</h3>
-  //       <ul className='mb-3'>
-  //         <li><strong>Post Weekly Updates</strong> – Share what you&apos;re learning every week.</li>
-  //         <li><strong>Build a Learning Streak</strong> – Stay consistent and rank higher on the leaderboard.</li>
-  //         <li><strong>Get Smart Reminders</strong> – Miss three weeks? Get an email nudge to get back on track!</li>
-  //         <li><strong>Engage & Compete</strong> – See what your peers are learning and challenge yourself.</li>
-  //       </ul>
-
-  //       <h3 className='text-xl mb-2'>🎯 Why Use PrepTrack?</h3>
-  //       <ul className='mb-3'>
-  //         <li><strong>Stay Accountable</strong> – Never lose track of your progress.</li>
-  //         <li><strong>Collaborate & Learn</strong> – Gain insights from peers’ experiences.</li>
-  //         <li><strong>Boost Your Resume</strong> – Showcase continuous learning to recruiters.</li>
-  //         <li><strong>Compete & Excel</strong> – Earn badges, climb the leaderboard, and stay ahead.</li>
-  //       </ul>
-
-  //       <p>
-  //         👉 <strong>Start tracking your prep journey today with PrepTrack! 🚀</strong>
-  //       </p>
-  //     </section>
-  //   );
-  // },
 };
 
 export default LandingPage
