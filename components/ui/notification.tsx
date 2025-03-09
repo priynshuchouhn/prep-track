@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "@/lib/utils";
 import { Notification } from "@prisma/client";
+import { io } from "socket.io-client";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -17,6 +19,9 @@ import { Button } from "./button";
 
 export default function Notifications() {
     const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [socket, setSocket] = useState<any>(null);
+    console.log(notifications);
+
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -28,7 +33,28 @@ export default function Notifications() {
             }
         };
 
+        // Fetch notifications initially
         fetchNotifications();
+
+        // Set up WebSocket connection
+        const newSocket = io(API_BASE_URL);
+        setSocket(newSocket);
+
+        newSocket.on("connect", () => {
+            console.log("Connected to WebSocket");
+        });
+
+        newSocket.on("newNotification", (notification) => {
+            setNotifications((prev) => [notification, ...prev]);
+        });
+
+        // Polling fallback (fetch every 10 seconds)
+        const interval = setInterval(fetchNotifications, 10000);
+
+        return () => {
+            newSocket.disconnect();
+            clearInterval(interval);
+        };
     }, []);
 
     const markAsRead = async () => {
