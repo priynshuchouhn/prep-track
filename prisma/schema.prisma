@@ -25,7 +25,7 @@ model User {
   posts        Post[] // Relation with posts
   lastPostedAt DateTime? // Track last post date for reminders
   Reminder     Reminder?
-  Leaderboard  Leaderboard[]
+  Leaderboard  Leaderboard?
   Comment      Comment[]
   Like         Like[]
   Notification Notification[]
@@ -55,9 +55,9 @@ model Reminder {
 model Leaderboard {
   id        String @id @default(uuid())
   user      User   @relation(fields: [userId], references: [id])
-  userId    String
+  userId    String @unique
   rank      Int
-  score      Int
+  score     Int
   postCount Int    @default(0) // Total posts
   streak    Int    @default(0) // Longest posting streak
 }
