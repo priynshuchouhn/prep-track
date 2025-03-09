@@ -29,7 +29,7 @@ async function Footer() {
                 </SheetTrigger>
                 <SheetContent side="bottom" className="h-full">
                     <SheetHeader>
-                        <SheetTitle>Post an update</SheetTitle>
+                        <SheetTitle className="text-2xl">Post an update</SheetTitle>
                         <SheetDescription>
                             <CreatePostForm rows={15} className="h-[80vh] overflow-y-auto"/>
                         </SheetDescription>
