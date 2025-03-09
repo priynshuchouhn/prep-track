@@ -9,6 +9,7 @@ import Image from "next/image";
 import Navbar from "@/components/ui/nav-bar";
 import CreatePostForm from "@/components/ui/create-post-form";
 import Feed from "@/components/ui/feed";
+import { auth } from "@/auth";
 
 
 const trendingTopics = [
@@ -34,8 +35,8 @@ const topPerformers = [
   },
 ];
 
-export default function HomePage() {
-
+export default async function HomePage() {
+  const session = await auth();
 
   return (
     <div className="min-h-screen bg-background">
@@ -50,10 +51,10 @@ export default function HomePage() {
               <Card className="p-4">
                 <div className="flex items-center space-x-3 mb-6">
                   <Avatar className="h-12 w-12">
-                    <Image src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100" alt="User" width={500} height={500} className="object-cover" />
+                    <Image src={session?.user.image || ""} alt="User" width={500} height={500} className="object-cover" />
                   </Avatar>
                   <div>
-                    <div className="font-semibold">John Doe</div>
+                    <div className="font-semibold">{session?.user.name}</div>
                     <div className="text-sm text-muted-foreground">🔥 15 day streak</div>
                   </div>
                 </div>

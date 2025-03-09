@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Link from "next/link";
-import { BookOpen, Sparkles, CheckCircle2, GraduationCap } from "lucide-react";
+import {  Sparkles, GraduationCap } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,9 +23,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import axios from "axios";
+import { API_BASE_URL } from "@/lib/utils";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
+  image: z.string().min(2, "Image must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters")
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password must contain at least one uppercase letter, one lowercase letter, and one number"),
@@ -39,6 +41,7 @@ const formSchema = z.object({
 export default function RegisterPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,18 +50,27 @@ export default function RegisterPage() {
       email: "",
       password: "",
       confirmPassword: "",
+      image: "https://res.cloudinary.com/dw1navurk/image/upload/v1741540985/prep-track/lrow8yf5t5i4cfle7iuf.png"
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Here you would typically make an API call to create the user
-      // For now, we'll simulate success and redirect to login
+      setIsLoading(true);
+      // Make API call to register user
+      await axios.post(`${API_BASE_URL}/auth/register`, values);
+      // Redirect to login after successful registration
       router.push("/login");
-    } catch (error) {
-      setError("An error occurred during registration. Please try again.");
+    } catch (error: any) {
+      // Handle errors
+      setIsLoading(false);
+      if (error.response) {
+        setError(error.response.data.error || "An error occurred during registration.");
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     }
-  }
+  };
 
   const passwordStrength = form.watch("password");
   const getPasswordStrength = (password: string) => {
@@ -193,10 +205,11 @@ export default function RegisterPage() {
                 )}
 
                 <Button
+                disabled={isLoading}
                   type="submit"
                   className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
                 >
-                  Create Account
+                  {isLoading? 'Onboarding you...':'Create Account'}
                 </Button>
               </form>
             </Form>
