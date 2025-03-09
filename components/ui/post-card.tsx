@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card } from './card';
 import { Avatar } from './avatar';
 import { Button } from './button';
@@ -15,7 +15,10 @@ import { useRouter } from 'next/navigation';
 function PostCard({ post }: { post: FeedPost }) {
     const session = useSession();
     const router = useRouter();
-    const [liked, setLiked] = useState(post.Like.findIndex(el => el.userId == session.data?.user.id)> -1);
+    const [liked, setLiked] = useState(false);
+    useEffect(()=>{
+        setLiked(post.Like.findIndex(el => el.userId == session.data?.user.id)> -1)
+    },[session?.data?.user.id])
     const toggleLike = async () => {
         try {
             const res = await axios.post(`${API_BASE_URL}/posts/like`, { postId: post.id });

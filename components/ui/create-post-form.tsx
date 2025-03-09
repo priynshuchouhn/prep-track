@@ -41,7 +41,6 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ className, rows = 3 }) 
     const fetchTags = async () => {
       const res = await axios.get(`${API_BASE_URL}/tags`);
       const data = res.data
-      console.log(data);
       setTopics(data)
     }
     fetchTags();

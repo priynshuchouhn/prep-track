@@ -27,7 +27,6 @@ export default function Notifications() {
         const fetchNotifications = async () => {
             try {
                 const res = await axios.get(`${API_BASE_URL}/notifications`);
-                console.log("response");
                 setNotifications(res.data);
             } catch (error) {
                 console.error("Failed to fetch notifications", error);
