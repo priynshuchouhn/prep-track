@@ -1,5 +1,6 @@
 import { Server as NetServer } from "http";
 import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest } from "next/server";
 import { Server as SocketIOServer } from "socket.io";
 
 interface CustomNextApiResponse extends NextApiResponse {
@@ -8,7 +9,7 @@ interface CustomNextApiResponse extends NextApiResponse {
   };
 }
 
-export async function GET(req: NextApiRequest, res: CustomNextApiResponse) {
+export async function GET(req: NextRequest, res: CustomNextApiResponse) {
   if (!res.socket.server.io) {
     console.log("Starting WebSocket server...");
 
