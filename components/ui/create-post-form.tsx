@@ -8,8 +8,9 @@ import { BookMarked } from 'lucide-react';
 function CreatePostForm() {
     const [postContent, setPostContent] = useState("");
   return (
-    <Card className="p-6 mb-6">
+    <Card className="p-2 md:p-6 md:mb-6">
               <Textarea
+              rows={8}
                 placeholder="Share your learning update..."
                 className="mb-4"
                 value={postContent}

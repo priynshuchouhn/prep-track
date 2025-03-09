@@ -31,7 +31,7 @@ async function Navbar({ isHomePage = false }: { isHomePage?: boolean }) {
           <span className="font-bold">Prep Track</span>
         </Link>
         {isHomePage ?
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 ">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar className="h-8 w-8 cursor-pointer">

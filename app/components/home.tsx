@@ -1,18 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   TrendingUp,
-  ThumbsUp,
-  MessageSquare,
-  Share2,
-  Bookmark,
   Trophy,
 } from "lucide-react";
 import Image from "next/image";
 import Navbar from "@/components/ui/nav-bar";
 import CreatePostForm from "@/components/ui/create-post-form";
+import Feed from "@/components/ui/feed";
 
 const dummyPosts = [
   {
@@ -65,14 +61,14 @@ const topPerformers = [
 ];
 
 export default function HomePage() {
-  
+
 
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
-      <Navbar isHomePage={true}/>
+      <Navbar isHomePage={true} />
 
-      <div className="mx-auto px-8 pt-10">
+      <div className="mx-auto px-2 md:px-8 pt-4 pb-12 md:pt-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Left Sidebar */}
           <div className="hidden md:block md:col-span-3">
@@ -104,56 +100,11 @@ export default function HomePage() {
           {/* Main Content */}
           <div className="md:col-span-6">
             {/* Create Post */}
-            <CreatePostForm/>
-
+            <div className="hidden md:block">
+              <CreatePostForm />
+            </div>
             {/* Feed Tabs */}
-            <Tabs defaultValue="all" className="mb-6">
-              <TabsList className="w-full justify-start sticky top-[73px] md:top-[80px] h-full z-10 hidden md:flex">
-                <TabsTrigger className="p-3" value="all">All Updates</TabsTrigger>
-                <TabsTrigger className="p-3" value="following">Following</TabsTrigger>
-                <TabsTrigger className="p-3" value="trending">Trending</TabsTrigger>
-              </TabsList>
-              <TabsContent value="all" className="space-y-4 mt-6">
-                {dummyPosts.map((post) => (
-                  <Card key={post.id} className="p-6">
-                    <div className="flex items-center space-x-4 mb-4">
-                      <Avatar>
-                        <Image src={post.user.avatar} alt={post.user.name} width={500} height={500} className="object-cover" />
-                      </Avatar>
-                      <div>
-                        <div className="font-semibold">{post.user.name}</div>
-                        <div className="text-sm text-muted-foreground flex items-center">
-                          <span>{post.timestamp}</span>
-                          <span className="mx-2">•</span>
-                          <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs">
-                            {post.user.badge}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-foreground whitespace-pre-line">{post.content}</p>
-                    <div className="flex items-center space-x-4 mt-4 pt-4 border-t">
-                      <Button variant="ghost" size="sm">
-                        <ThumbsUp className="h-4 w-4 mr-2" />
-                        {post.likes}
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        <MessageSquare className="h-4 w-4 mr-2" />
-                        {post.comments}
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        <Share2 className="h-4 w-4 mr-2" />
-                        Share
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        <Bookmark className="h-4 w-4 mr-2" />
-                        Save
-                      </Button>
-                    </div>
-                  </Card>
-                ))}
-              </TabsContent>
-            </Tabs>
+           <Feed/>
           </div>
 
           {/* Right Sidebar */}
