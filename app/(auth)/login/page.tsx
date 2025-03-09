@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Link from "next/link";
-import { BookOpen, GraduationCap, Sparkles } from "lucide-react";
+import { GraduationCap, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,8 +37,8 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "user@example.com",
+      password: "password",
     },
   });
 
@@ -49,13 +49,11 @@ export default function LoginPage() {
         password: values.password,
         redirect: false,
       });
-
       if (result?.error) {
         setError("Invalid email or password");
         return;
       }
-
-      router.push("/home");
+      router.push("/");
     } catch (error) {
       setError("An error occurred. Please try again.");
     }

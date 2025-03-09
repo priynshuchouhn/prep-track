@@ -1,14 +1,9 @@
-"use client";
-
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   TrendingUp,
-  BookMarked,
   ThumbsUp,
   MessageSquare,
   Share2,
@@ -17,6 +12,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Navbar from "@/components/ui/nav-bar";
+import CreatePostForm from "@/components/ui/create-post-form";
 
 const dummyPosts = [
   {
@@ -69,7 +65,7 @@ const topPerformers = [
 ];
 
 export default function HomePage() {
-  const [postContent, setPostContent] = useState("");
+  
 
   return (
     <div className="min-h-screen bg-background">
@@ -108,23 +104,7 @@ export default function HomePage() {
           {/* Main Content */}
           <div className="md:col-span-6">
             {/* Create Post */}
-            <Card className="p-6 mb-6">
-              <Textarea
-                placeholder="Share your learning update..."
-                className="mb-4"
-                value={postContent}
-                onChange={(e) => setPostContent(e.target.value)}
-              />
-              <div className="flex justify-between items-center">
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">
-                    <BookMarked className="h-4 w-4 mr-2" />
-                    Topic
-                  </Button>
-                </div>
-                <Button>Post Update</Button>
-              </div>
-            </Card>
+            <CreatePostForm/>
 
             {/* Feed Tabs */}
             <Tabs defaultValue="all" className="mb-6">

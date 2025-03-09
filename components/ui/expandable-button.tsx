@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 
 export const ExpandableButton = ({ children, cardContent }: { children: React.ReactNode, cardContent: any }) => {
+  cardContent.content = renderContent(cardContent.contentType)
   const [active, setActive] = useState<(typeof cardContent) | boolean | null>(
     null
   );
@@ -153,6 +154,42 @@ export const CloseIcon = () => {
       <path d="M6 6l12 12" />
     </motion.svg>
   );
+};
+
+const renderContent = (contentType:string) => {
+  if (contentType === "prepTrackInfo") {
+    return (
+      <section id="learn-more">
+        <p className="mb-3">
+          PrepTrack is your <strong>personal placement companion</strong>, helping you stay
+          <strong> consistent, accountable, and motivated</strong> throughout your job preparation journey.
+          Whether you&apos;re mastering <strong>DSA, Web Development, AI, or Aptitude</strong>,
+          PrepTrack ensures you never fall behind.
+        </p>
+
+        <h3 className="text-xl mb-2">📌 How It Works</h3>
+        <ul className="mb-3">
+          <li><strong>Post Weekly Updates</strong> – Share what you&apos;re learning every week.</li>
+          <li><strong>Build a Learning Streak</strong> – Stay consistent and rank higher on the leaderboard.</li>
+          <li><strong>Get Smart Reminders</strong> – Miss three weeks? Get an email nudge to get back on track!</li>
+          <li><strong>Engage & Compete</strong> – See what your peers are learning and challenge yourself.</li>
+        </ul>
+
+        <h3 className="text-xl mb-2">🎯 Why Use PrepTrack?</h3>
+        <ul className="mb-3">
+          <li><strong>Stay Accountable</strong> – Never lose track of your progress.</li>
+          <li><strong>Collaborate & Learn</strong> – Gain insights from peers’ experiences.</li>
+          <li><strong>Boost Your Resume</strong> – Showcase continuous learning to recruiters.</li>
+          <li><strong>Compete & Excel</strong> – Earn badges, climb the leaderboard, and stay ahead.</li>
+        </ul>
+
+        <p>
+          👉 <strong>Start tracking your prep journey today with PrepTrack! 🚀</strong>
+        </p>
+      </section>
+    );
+  }
+  return null; // Default case if contentType doesn't match
 };
 
 
