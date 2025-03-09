@@ -21,13 +21,13 @@ import clsx from "clsx";
 export default function Notifications() {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [socket, setSocket] = useState<any>(null);
-    console.log(notifications);
 
 
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
                 const res = await axios.get(`${API_BASE_URL}/notifications`);
+                console.log("response");
                 setNotifications(res.data);
             } catch (error) {
                 console.error("Failed to fetch notifications", error);
@@ -46,22 +46,23 @@ export default function Notifications() {
         });
 
         newSocket.on("newNotification", (notification) => {
+            console.log("websocket"+notification);
             setNotifications((prev) => [notification, ...prev]);
         });
 
         // Polling fallback (fetch every 10 seconds)
-        const interval = setInterval(fetchNotifications, 10000);
+        // const interval = setInterval(fetchNotifications, 10000);
 
         return () => {
             newSocket.disconnect();
-            clearInterval(interval);
+            // clearInterval(interval);
         };
     }, []);
 
     const markAsRead = async () => {
         try {
             await axios.post(`${API_BASE_URL}/notifications/read`);
-            setNotifications([]); // Clear notifications after marking as read
+            setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
         } catch (error) {
             console.error("Failed to mark notifications as read", error);
         }

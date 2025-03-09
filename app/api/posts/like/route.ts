@@ -65,6 +65,7 @@ export async function POST(req: Request) {
         // Fetch WebSocket instance
         const io = (global as any).io;
         if (io) {
+          console.log("here");
           await sendNotification(io, post.userId, `${session.user.name} liked your post.`, "LIKE",);
         } else {
           // Save in database only if WebSocket is not available
