@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { sendMessage } from "@/lib/message";
 import { getIO } from "@/lib/websocket";
+import { revalidatePath } from "next/cache";
 
 // ✅ Get all messages in a chat
 export async function GET(req: Request, { params }: { params: Promise<{ chatId: string }>}) {
@@ -17,7 +18,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ chatId: 
             where: { chatId: chatId },
             orderBy: { createdAt: "asc" }
         });
-
+        revalidatePath('/chat/[chatId]');
         return NextResponse.json(messages, { status: 200 });
 
     } catch (error) {
@@ -57,7 +58,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ chatId:
             });
         }
 
-
+        revalidatePath('/chat/[chatId]');
         return NextResponse.json({ status: 201 });
 
     } catch (error) {

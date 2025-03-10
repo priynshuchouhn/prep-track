@@ -1,6 +1,7 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -25,6 +26,7 @@ export async function GET(req: NextRequest) {
                 Comment: true
             }
         });
+        revalidatePath('/');
         return NextResponse.json(posts);
     } catch (error) {
         return NextResponse.json([]);

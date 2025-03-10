@@ -41,7 +41,6 @@ function ChatMessagePage() {
                 const formattedMessage = (res.data.messages as any).map((msg: any) => ({ ...msg, isSender: msg.senderId == session.data?.user.id }))
                 setMessages(formattedMessage);
                 setUser(res.data.user);
-                console.log(formattedMessage);
             } catch (error) {
                 console.error("Failed to fetch messages", error);
             }

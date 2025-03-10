@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
+import { revalidatePath } from "next/cache";
 
 // ✅ Create or get a chat between two users
 export async function POST(req: Request) {
@@ -43,7 +44,6 @@ export async function POST(req: Request) {
 // ✅ Get all chats of logged-in user
 export async function GET() {
     try {
-        console.log("[GET Chats]")
         const session = await auth(); // Get logged-in user
         if (!session || !session.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         const userId = session.user.id;
@@ -59,7 +59,7 @@ export async function GET() {
                 user2: { select: { id: true, name: true, image:true } },
             }
         });
-
+        revalidatePath('/chat');
         return NextResponse.json(chats, { status: 200 });
 
     } catch (error) {

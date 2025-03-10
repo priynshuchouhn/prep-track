@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 import prisma from '@/lib/prisma'
+import { revalidatePath } from "next/cache";
 
 export async function GET(req: Request, { params }: { params: Promise<{ chatId: string }>}) {
     try {
@@ -52,7 +53,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ chatId: 
             messages: chat.messages  // Select the other user
         };
 
-
+        revalidatePath('/chat/[chatId]');
         return NextResponse.json(result, { status: 200 });
 
     } catch (error) {
