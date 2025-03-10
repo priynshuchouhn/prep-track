@@ -8,8 +8,10 @@ import {
     MoreVertical,
     Search,
     BookOpen,
+    SeparatorHorizontal,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Chat, User } from "@prisma/client";
 import axios from "axios";
@@ -20,8 +22,6 @@ import { useSession } from "next-auth/react";
 
 
 type ChatsType = Chat & { user: User }
-export const dynamic = 'force-dynamic';
-
 
 export default function ChatPage() {
     const [chats, setChats] = useState<ChatsType[]>([]);
@@ -29,28 +29,22 @@ export default function ChatPage() {
     const [usersForChat, setUserForChat] = useState<User[]>([]);
     const router = useRouter();
     useEffect(() => {
-        if (!session.data?.user.id) return;
-        try {
-            const fetchChats = async () => {
-                const resChat = await axios.get(`${API_BASE_URL}/chat`);
-                const chats = resChat.data;
-                const resUser = await axios.get(`${API_BASE_URL}/users/available`);
-                const users: User[] = resUser.data
-                if (chats.length > 0) {
-                    const formattedChats: ChatsType[] = chats.map((chat: any) => ({ ...chat, user: chat.user1Id == session.data?.user.id ? chat.user2 : chat.user1 }))
-                    const newChatUser = users.filter(user => !formattedChats.some(chat => chat.user.id === user.id));
-                    setUserForChat(newChatUser);
-                    setChats(formattedChats);
-                } else {
-                    setUserForChat(users);
-                    setChats(chats);
-                }
+        const fetchChats = async () => {
+            const resChat = await axios.get(`${API_BASE_URL}/chat`);
+            const chats = resChat.data;
+            const resUser = await axios.get(`${API_BASE_URL}/users/available`);
+            const users: User[] = resUser.data
+            if (chats.length > 0) {
+                const formattedChats: ChatsType[] = chats.map((chat: any) => ({ ...chat, user: chat.user1Id == session.data?.user.id ? chat.user2 : chat.user1 }))
+                const newChatUser = users.filter(user => !formattedChats.some(chat => chat.user.id === user.id));
+                setUserForChat(newChatUser);
+                setChats(formattedChats);
+            } else {
+                setUserForChat(users);
+                setChats(chats);
             }
-            fetchChats();
-            
-        } catch (error) {
-            console.log(error);
         }
+        fetchChats();
     }, [session.data?.user.id])
 
     const startChat = async (receiverId: string) => {

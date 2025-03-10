@@ -1,5 +1,4 @@
-'use client';
-import { Sparkles, Home, ArrowLeft, GraduationCap } from "lucide-react";
+import { BookOpen, Sparkles, Home, ArrowLeft, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

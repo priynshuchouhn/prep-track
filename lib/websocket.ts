@@ -1,5 +1,3 @@
-
-import { auth } from "@/auth";
 import { io as ClientIO, Socket } from "socket.io-client";
 
 declare global {
@@ -15,7 +13,7 @@ let reconnectAttempts = 0;
  * Initialize WebSocket connection only once.
  * @param serverUrl The WebSocket server URL
  */
-export const initializeWebSocket =  (serverUrl: string, userId:string) => {
+export const initializeWebSocket = (serverUrl: string, userId?:string) => {
     if (typeof window === "undefined") return; // Prevent running on server
 
     if (!window._socket) {
@@ -53,7 +51,7 @@ export const initializeWebSocket =  (serverUrl: string, userId:string) => {
             console.log(`🔄 Reconnecting in ${retryDelay / 1000} seconds...`);
 
             setTimeout(() => {
-                initializeWebSocket(serverUrl, userId); // Reinitialize WebSocket
+                initializeWebSocket(serverUrl); // Reinitialize WebSocket
             }, retryDelay);
         });
     } else {
@@ -64,7 +62,7 @@ export const initializeWebSocket =  (serverUrl: string, userId:string) => {
 /**
  * Get the existing WebSocket instance.
  */
-export const getSocket =  (): Socket => {
+export const getSocket = (): Socket => {
     if (!window._socket) {
         throw new Error("❌ WebSocket not initialized! Call initializeWebSocket(serverUrl) first.");
     }
