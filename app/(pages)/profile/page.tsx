@@ -6,13 +6,11 @@ import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     BookOpen,
     Trophy,
     Calendar,
     Star,
-    TrendingUp,
     Users,
     BookMarked,
     Github,
@@ -34,6 +32,8 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import Image from "next/image";
+export const dynamic = 'force-dynamic';
+
 
 const activityData = [
     { date: "Mon", posts: 4 },
