@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
                 Comment: true
             }
         });
-        revalidatePath('/');
+        revalidatePath('/', 'page');
         return NextResponse.json(posts);
     } catch (error) {
         return NextResponse.json([]);
@@ -121,7 +121,7 @@ export async function POST(req: Request) {
                     data: { userId, rank: 0, score: 0, postCount, streak: currentStreak },
                 }),
         ]);
-
+        revalidatePath('/', 'page');
         return NextResponse.json(newPost, { status: 201 });
     } catch (error) {
         console.error("Error creating post:", error);

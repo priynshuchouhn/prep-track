@@ -59,7 +59,7 @@ export async function GET() {
                 user2: { select: { id: true, name: true, image:true } },
             }
         });
-        revalidatePath('/chat');
+        revalidatePath('/chat', 'page');
         return NextResponse.json(chats, { status: 200 });
 
     } catch (error) {

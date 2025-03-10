@@ -45,7 +45,7 @@ export default function ChatPage() {
             }
         }
         fetchChats();
-    }, [])
+    }, [session.data?.user.id])
 
     const startChat = async (receiverId: string) => {
         try {

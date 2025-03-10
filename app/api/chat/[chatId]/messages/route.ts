@@ -18,7 +18,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ chatId: 
             where: { chatId: chatId },
             orderBy: { createdAt: "asc" }
         });
-        revalidatePath('/chat/[chatId]');
+        revalidatePath('/chat/[chatId]', 'page');
         return NextResponse.json(messages, { status: 200 });
 
     } catch (error) {
@@ -58,7 +58,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ chatId:
             });
         }
 
-        revalidatePath('/chat/[chatId]');
+        revalidatePath('/chat/[chatId]', 'page');
         return NextResponse.json({ status: 201 });
 
     } catch (error) {

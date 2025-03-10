@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { API_BASE_URL, timeAgo, WS_BASE_URL } from '@/lib/utils';
 import { Message, User } from '@prisma/client';
-import { ChevronLeft, Paperclip, Phone, Send, Smile, Users, Video } from 'lucide-react'
+import { ChevronLeft, Circle, Paperclip, Phone, Send, Smile, Users, Video } from 'lucide-react'
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useRef, useState } from 'react'
@@ -31,8 +31,8 @@ function ChatMessagePage() {
     const session = useSession();
     const chatId = pathname.split('/')[2];
     const [messages, setMessages] = useState<MessageType[]>([]);
+    const[isLoading, setIsLoading] = useState<boolean>(false);
     const scrollRef = useRef<HTMLDivElement>(null);
-    console.log(messages);
     const [user, setUser] = useState<User>()
     useEffect(() => {
         const fetchMessages = async () => {
@@ -84,14 +84,17 @@ function ChatMessagePage() {
 
     const sendMessage = async (data: MessageFormData) => {
         if (!data.content.trim()) return;
+        setIsLoading(true);
         const messageData = {
             content: data.content,
         };
         try {
             await axios.post(`${API_BASE_URL}/chat/${chatId}/messages`, messageData);
             reset(); // Reset input field after sending
+            setIsLoading(false);
         } catch (error) {
             console.error("Error sending message", error);
+            setIsLoading(false);
         }
     };
 
@@ -171,8 +174,8 @@ function ChatMessagePage() {
                         <Button variant="ghost" size="icon">
                             <Smile className="h-5 w-5" />
                         </Button>
-                        <Button size="icon" type="submit">
-                            <Send className="h-5 w-5" />
+                        <Button size="icon" type="submit" disabled={isLoading}>
+                            {isLoading ? <Circle className="h-5 w-5 animate-spin"/>: <Send className="h-5 w-5" />}
                         </Button>
                     </form>
                 </div>

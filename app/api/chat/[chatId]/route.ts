@@ -53,7 +53,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ chatId: 
             messages: chat.messages  // Select the other user
         };
 
-        revalidatePath('/chat/[chatId]');
+        revalidatePath('/chat/[chatId]', 'page');
         return NextResponse.json(result, { status: 200 });
 
     } catch (error) {
