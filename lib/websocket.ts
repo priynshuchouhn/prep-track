@@ -27,6 +27,12 @@ export const initializeWebSocket = (server: HttpServer) => {
                 console.log(`📢 User ${userId} joined notification room`);
             });
 
+            // Handle user joining their Chat room
+            socket.on("joinChat", (chatId: string) => {
+                socket.join(chatId);
+                console.log(`💬 User joined chat: ${chatId}`);
+            });
+
             socket.on("disconnect", () => {
                 console.log(`⚠️ User Disconnected: ${socket.id}`);
             });

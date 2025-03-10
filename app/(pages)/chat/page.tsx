@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
@@ -7,37 +8,54 @@ import {
     MoreVertical,
     Search,
     BookOpen,
+    SeparatorHorizontal,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Chat, User } from "@prisma/client";
+import axios from "axios";
+import { API_BASE_URL } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 
-
-const onlineUsers = [
-    {
-        id: 1,
-        name: "Sarah Chen",
-        avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100",
-        status: "online",
-        lastSeen: "Active now",
-    },
-    {
-        id: 2,
-        name: "Alex Kumar",
-        avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=100",
-        status: "online",
-        lastSeen: "Active now",
-    },
-    {
-        id: 3,
-        name: "Emily Rodriguez",
-        avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=100",
-        status: "offline",
-        lastSeen: "2h ago",
-    },
-];
+type ChatsType = Chat & { user: User }
 
 export default function ChatPage() {
+    const [chats, setChats] = useState<ChatsType[]>([]);
+    const session = useSession();
+    const [usersForChat, setUserForChat] = useState<User[]>([]);
+    const router = useRouter();
+    useEffect(() => {
+        const fetchChats = async () => {
+            const resChat = await axios.get(`${API_BASE_URL}/chat`);
+            const chats = resChat.data;
+            const resUser = await axios.get(`${API_BASE_URL}/users/available`);
+            const users: User[] = resUser.data
+            if (chats.length > 0) {
+                const formattedChats: ChatsType[] = chats.map((chat: any) => ({ ...chat, user: chat.user1Id == session.data?.user.id ? chat.user2 : chat.user1 }))
+                const newChatUser = users.filter(user => !formattedChats.some(chat => chat.user.id === user.id));
+                setUserForChat(newChatUser);
+                setChats(formattedChats);
+            } else {
+                setUserForChat(users);
+                setChats(chats);
+            }
+        }
+        fetchChats();
+    }, [])
+
+    const startChat = async (receiverId: string) => {
+        try {
+            const resChat = await axios.post(`${API_BASE_URL}/chat`, { receiverId });
+            const chat: Chat = resChat.data
+            router.push(`/chat/${chat.id}`);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div className="min-h-screen bg-background">
             <div className=" mx-auto md:px-4">
@@ -60,28 +78,76 @@ export default function ChatPage() {
                             />
                         </div>
                         <ScrollArea className="h-[70vh]">
-                            <div className="space-y-2">
-                                {onlineUsers.map((user) => (
-                                    <Link href={`/chat/${user.id}`} key={user.id}>
-                                        <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted cursor-pointer">
+                            {chats.length > 0 ?
+                                <>
+                                    <div className="space-y-2 bg-gray-50">
+                                        {chats.map((chat) => (
+                                            <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted cursor-pointer" key={chat.user.id} onClick={() => startChat(chat.user.id)}>
+                                                <div className="relative">
+                                                    <Avatar className="h-12 w-12">
+                                                        <Image src={chat.user.image || ""} alt={chat.user.name} width={500} height={500} className="object-cover" />
+                                                    </Avatar>
+                                                    {/* {chat.user.status === "online" && (
+                                                    <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-background" />
+                                                )} */}
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="font-bold">{chat.user.name}</div>
+                                                    {/* <div className="text-sm text-muted-foreground truncate">
+                                                    {user.lastSeen}
+                                                </div> */}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <Separator />
+                                    <p className="text-primary font-semibold my-5">Start a new chat</p>
+                                    {usersForChat.map((user) => (
+                                        <div key={user.id} className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted cursor-pointer" onClick={() => startChat(user.id)}>
                                             <div className="relative">
                                                 <Avatar>
-                                                    <Image src={user.avatar} alt={user.name} width={500} height={500} />
+                                                    <Image src={user.image || ""} alt={user.name} width={500} height={500}  className="object-cover"/>
                                                 </Avatar>
-                                                {user.status === "online" && (
+                                                {/* {chat.user.status === "online" && (
                                                     <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-background" />
-                                                )}
+                                                )} */}
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="font-medium">{user.name}</div>
-                                                <div className="text-sm text-muted-foreground truncate">
+                                                {/* <div className="text-sm text-muted-foreground truncate">
                                                     {user.lastSeen}
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
-                                    </Link>
-                                ))}
-                            </div>
+                                    ))}
+                                </>
+                                : <>
+                                    <div className="flex items-center justify-center h-full ">
+                                        <p className="text-muted-foreground mb-3">
+                                            No chats found, Start new chat now
+                                        </p>
+                                    </div>
+                                    <Separator />
+                                    {usersForChat.map((user) => (
+                                        <div key={user.id} className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted cursor-pointer" onClick={() => startChat(user.id)}>
+                                            <div className="relative">
+                                                <Avatar>
+                                                    <Image src={user.image || ""} alt={user.name} width={500} height={500}  className="object-cover" />
+                                                </Avatar>
+                                                {/* {chat.user.status === "online" && (
+                                                    <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-background" />
+                                                )} */}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="font-medium">{user.name}</div>
+                                                {/* <div className="text-sm text-muted-foreground truncate">
+                                                    {user.lastSeen}
+                                                </div> */}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </>
+                            }
                         </ScrollArea>
                     </Card>
                 </div>
