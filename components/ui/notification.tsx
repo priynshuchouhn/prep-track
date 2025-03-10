@@ -17,6 +17,7 @@ import { Bell } from "lucide-react";
 import { Button } from "./button";
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
+import { getSocket, initializeWebSocket } from "@/lib/websocket";
 
 
 export default function Notifications() {
@@ -37,36 +38,33 @@ export default function Notifications() {
 
         // Fetch notifications initially
         fetchNotifications();
-
-        // Set up WebSocket connection
-        const newSocket = io(`${WS_BASE_URL}`, {
-            transports: ["websocket", "polling"],
-            reconnectionAttempts: 5,
-            reconnectionDelay: 2000,
-        });
-        setSocket(newSocket);
-
-        newSocket.on("connect", () => {
-            // console.log("Connected to WebSocket");
-            if (session.data?.user.id) {
-                // console.log(`🔹 Joining room: ${session.data?.user.id}`);
-                newSocket.emit("joinRoom", session.data?.user.id);
-            }
-        });
-
-        newSocket.on("connect_error", (error) => {
-            console.error("❌ WebSocket connection error:", error);
-        });
-
-        newSocket.on("newNotification", (notification) => {
-            setNotifications((prev) => [notification, ...prev]);
-        });
+        if(session.data?.user.id){
+            initializeWebSocket(`${WS_BASE_URL}`, session.data?.user.id);
+            const newSocket = getSocket();
+            setSocket(newSocket);
+    
+            newSocket.on("connect", () => {
+                // console.log("Connected to WebSocket");
+                if (session.data?.user.id) {
+                    // console.log(`🔹 Joining room: ${session.data?.user.id}`);
+                    newSocket.emit("joinRoom", session.data?.user.id);
+                }
+            });
+    
+            newSocket.on("connect_error", (error) => {
+                console.error("❌ WebSocket connection error:", error);
+            });
+    
+            newSocket.on("newNotification", (notification) => {
+                setNotifications((prev) => [notification, ...prev]);
+            });
+        }
 
         // Polling fallback (fetch every 10 seconds)
         // const interval = setInterval(fetchNotifications, 10000);
 
         return () => {
-            newSocket.disconnect();
+            // newSocket.disconnect();
             // clearInterval(interval);
         };
     }, [session.data?.user.id]);

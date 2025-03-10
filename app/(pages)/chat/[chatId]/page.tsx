@@ -17,6 +17,7 @@ import axios from 'axios';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { io } from "socket.io-client";
+import { getSocket, initializeWebSocket } from '@/lib/websocket';
 
 
 
@@ -48,26 +49,25 @@ function ChatMessagePage() {
         fetchMessages();
     }, [chatId, session.data?.user.id]);
     useEffect(() => {
-        const socket = io(`${WS_BASE_URL}`, {
-            transports: ["websocket", "polling"],
-            reconnectionAttempts: 5,
-            reconnectionDelay: 2000,
-        });
-        socket.on("connect", () => {
-            if (session.data?.user.id) {
-                socket.emit("joinChat", session.data?.user.id);
-            }
-        });
-
-        // Listen for incoming messages
-        socket.on("newMessage", (message: MessageType) => {
-            setMessages((prev) => [...prev, { ...message, isSender: message.senderId == session.data?.user.id }]);
-        });
-
+        if(session.data?.user.id){
+            initializeWebSocket(`${WS_BASE_URL}`, session.data?.user.id);
+            const socket = getSocket();
+            socket.on("connect", () => {
+                if (session.data?.user.id) {
+                    socket.emit("joinChat", session.data?.user.id);
+                }
+            });
+    
+            // Listen for incoming messages
+            socket.on("newMessage", (message: MessageType) => {
+                setMessages((prev) => [...prev, { ...message, isSender: message.senderId == session.data?.user.id }]);
+            });
+        }
         return () => {
-            socket.off("newMessage");
+            // socket.off("newMessage");
         };
     }, [chatId, session.data?.user.id]);
+
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollIntoView({ behavior: "smooth" });

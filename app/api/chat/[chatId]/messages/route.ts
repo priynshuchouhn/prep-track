@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { sendMessage } from "@/lib/message";
-import { getIO } from "@/lib/websocket";
 import { revalidatePath } from "next/cache";
 
 // ✅ Get all messages in a chat
@@ -44,19 +43,19 @@ export async function POST(req: Request, { params }: { params: Promise<{ chatId:
         })
         if(!chat) return NextResponse.json({ error: "Chat not found" }, { status: 400 });
         const receiverId = chat?.user1Id ==  userId ? chat?.user2Id : chat?.user1Id
-        const io = getIO();
-        if (io) {
-            await sendMessage(io, chatId, userId, receiverId, content);
-        } else {
-            // Save in database only if WebSocket is not available
-            const message = await prisma.message.create({
-                data: {
-                    content,
-                    senderId: userId,
-                    chatId: chatId
-                }
-            });
-        }
+        await sendMessage(chatId, userId, receiverId, content);
+        // const io = getIO();
+        // if (io) {
+        // } else {
+        //     // Save in database only if WebSocket is not available
+        //     const message = await prisma.message.create({
+        //         data: {
+        //             content,
+        //             senderId: userId,
+        //             chatId: chatId
+        //         }
+        //     });
+        // }
 
         revalidatePath('/chat/[chatId]', 'page');
         return NextResponse.json({ status: 201 });

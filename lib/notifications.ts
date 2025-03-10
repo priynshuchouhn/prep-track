@@ -1,8 +1,10 @@
 import  prisma  from "@/lib/prisma";
 import { NotificationType } from "@prisma/client";
+import axios from "axios";
 import { Server } from "socket.io";
+import { WS_BASE_URL } from "./utils";
 
-export async function sendNotification(io: Server, userId: string, message: string, type: NotificationType) {
+export async function sendNotification(userId: string, message: string, type: NotificationType) {
   try {
     // Save notification in the database
     const notification = await prisma.notification.create({
@@ -15,10 +17,22 @@ export async function sendNotification(io: Server, userId: string, message: stri
     });
 
     // Check if the user is connected
-    const userSocket = io.sockets.adapter.rooms.get(userId); // Get active user connection
-    if (userSocket && userSocket.size > 0) {
-      io.to(userId).emit("newNotification", notification);
+    // const userSocket = io.sockets.adapter.rooms.get(userId); // Get active user connection
+    // if (userSocket && userSocket.size > 0) {
+    //   io.to(userId).emit("newNotification", notification);
+    // }
+    try {
+      await axios.post(`${WS_BASE_URL}/send-notification`, {
+        userId,
+        notification
+      });
+
+      console.log("📢 Notification sent to WebSocket server.");
+    } catch (err) {
+      console.error("⚠️ Failed to send notification to WebSocket server:", err);
     }
+
+    return notification;
 
   } catch (error) {
     console.error("Error sending notification:", error);

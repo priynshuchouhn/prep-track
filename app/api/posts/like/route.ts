@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import  prisma  from "@/lib/prisma";
 import { auth } from "@/auth";
 import { sendNotification } from "@/lib/notifications";
-import { getIO } from "@/lib/websocket";
 
 
 export async function POST(req: Request) {
@@ -62,18 +61,18 @@ export async function POST(req: Request) {
 
     // }
 
-    if (post.userId !== userId) {
-        // Fetch WebSocket instance
-        const io = getIO();
-        if (io) {
-          await sendNotification(io, post.userId, `${session.user.name} liked your post.`, "LIKE",);
-        } else {
-          // Save in database only if WebSocket is not available
-          await prisma.notification.create({
-            data: { userId: post.userId, message: `${session.user.name} liked your post.`,type: "LIKE", read: false },
-          });
-        }
-      }
+    await sendNotification(post.userId, `${session.user.name} liked your post.`, "LIKE",);
+    // if (post.userId !== userId) {
+    //     // Fetch WebSocket instance
+    //     const io = getIO();
+    //     if (io) {
+    //     } else {
+    //       // Save in database only if WebSocket is not available
+    //       await prisma.notification.create({
+    //         data: { userId: post.userId, message: `${session.user.name} liked your post.`,type: "LIKE", read: false },
+    //       });
+    //     }
+    //   }
 
     return NextResponse.json({ message: "Post liked", liked: true });
   } catch (error) {
