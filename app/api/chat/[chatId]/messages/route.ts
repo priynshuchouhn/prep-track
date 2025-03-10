@@ -26,7 +26,7 @@ export async function GET(req: Request, { params }: { params: { chatId: string }
 }
 
 // ✅ Send a message
-export async function POST(req: NextRequest, { params }: { params: { chatId: string } }) {
+export async function POST(req: Request, { params }: { params: { chatId: string } }) {
     try {
         const session = await auth(); // Get logged-in user
         const chatId = params.chatId;
