@@ -5,9 +5,9 @@ import { sendMessage } from "@/lib/message";
 import { getIO } from "@/lib/websocket";
 
 // ✅ Get all messages in a chat
-export async function GET(req: Request, { params }: { params: { chatId: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ chatId: string }>}) {
     try {
-        const chatId = params.chatId
+        const {chatId} = await params
         const session = await auth(); // Get logged-in user
         if (!session || !session.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         const userId = session.user.id;
@@ -26,10 +26,10 @@ export async function GET(req: Request, { params }: { params: { chatId: string }
 }
 
 // ✅ Send a message
-export async function POST(req: Request, { params }: { params: { chatId: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ chatId: string }>}) {
     try {
         const session = await auth(); // Get logged-in user
-        const chatId = params.chatId;
+        const {chatId} = await params;
         if (!session || !session.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         const userId = session.user.id;
         if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
