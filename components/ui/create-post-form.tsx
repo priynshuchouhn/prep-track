@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 // ✅ Schema Validation using Zod
 const postSchema = z.object({
   content: z.string().min(1, "Post content cannot be empty").max(500, "Post is too long"),
-  tags: z.array(z.string()).max(1, "Maximum 1 topics allowed"),
+  tags: z.array(z.string()).max(1, "Maximum 1 topics allowed").min(1,"Please select a topic"),
 });
 
 type PostFormData = z.infer<typeof postSchema>;
@@ -30,9 +30,10 @@ type PostFormData = z.infer<typeof postSchema>;
 interface CreatePostFormProps {
   className?: string;
   rows?: number;
+  onPostSubmit? : () => void
 }
 
-const CreatePostForm: React.FC<CreatePostFormProps> = ({ className, rows = 3 }) => {
+const CreatePostForm: React.FC<CreatePostFormProps> = ({ className, rows = 3, onPostSubmit }) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [topics,setTopics] = useState<Tag[]>([])
@@ -77,6 +78,7 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ className, rows = 3 }) 
       setLoading(true);
       await axios.post(`${API_BASE_URL}/posts`, data);
       reset();
+      onPostSubmit?.()
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -135,7 +137,7 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ className, rows = 3 }) 
               </Popover>
             )}
           </div>
-
+          {errors.tags && <p className="text-red-500 text-sm block">{errors.tags.message}</p>}
           <div className="flex justify-end">
           <Button type="submit" disabled={isLoading}>
               {isLoading ? "Posting..." : "Post Update"}

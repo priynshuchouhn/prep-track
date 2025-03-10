@@ -1,15 +1,7 @@
 import { auth } from "@/auth";
-import { Home, Search, PlusCircle, Bell, User } from "lucide-react";
+import { Home, Search, Bell, User, MessageSquare } from "lucide-react";
 import Link from "next/link";
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-} from "@/components/ui/sheet"
-import CreatePostForm from "@/components/ui/create-post-form";
+import AddPostButton from "@/components/ui/add-post-button";
 
 
 async function Footer() {
@@ -23,7 +15,8 @@ async function Footer() {
             <button>
                 <Search className="w-7 h-7 text-gray-700 hover:text-black" />
             </button>
-            <Sheet>
+            <AddPostButton/>
+            {/* <Sheet>
                 <SheetTrigger>
                     <PlusCircle className="w-10 h-10 text-gray-700 hover:text-black" />
                 </SheetTrigger>
@@ -35,10 +28,9 @@ async function Footer() {
                         </SheetDescription>
                     </SheetHeader>
                 </SheetContent>
-            </Sheet>
-
-            <Link href="/">
-                <Bell className="w-7 h-7 text-gray-700 hover:text-black" />
+            </Sheet> */}
+            <Link href="/chat">
+                <MessageSquare className="w-7 h-7 text-gray-700 hover:text-black" />
             </Link>
             <Link href="/">
                 <User className="w-7 h-7 text-gray-700 hover:text-black" />

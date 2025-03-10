@@ -1,4 +1,4 @@
-import { GraduationCap, Sparkles } from 'lucide-react'
+import { GraduationCap, MessageSquare, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 import { Button } from './button'
@@ -33,7 +33,13 @@ async function Navbar({ isHomePage = false }: { isHomePage?: boolean }) {
         </Link>
         {isHomePage ?
           <div className="flex items-center space-x-6">
+            <div className='hidden md:block'>
+            <Link href="/chat">
+                <MessageSquare className="w-7 h-7 text-gray-700 hover:text-black" />
+            </Link>
+            </div>
             <Notifications/>
+            <div className='hidden md:block'>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar className="h-8 w-8 cursor-pointer">
@@ -65,6 +71,7 @@ async function Navbar({ isHomePage = false }: { isHomePage?: boolean }) {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </div>
           </div> : <nav className="flex gap-4">
             <Link href={'/login'}>
               <Button variant="outline" size="sm">
