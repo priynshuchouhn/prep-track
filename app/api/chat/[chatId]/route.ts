@@ -2,9 +2,9 @@ import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 import prisma from '@/lib/prisma'
 
-export async function GET(req: Request, { params }: { params: { chatId: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ chatId: string }>}) {
     try {
-        const chatId = params.chatId
+        const {chatId} = await params
         const session = await auth(); // Get logged-in user
         if (!session || !session.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         const userId = session.user.id;
