@@ -99,7 +99,7 @@ function ChatMessagePage() {
     return (
         <>
             {/* Main Chat Area */}
-            <Card className="flex flex-col h-[80vh] md:h-[calc(100vh-120px)] py-3">
+            <Card className="flex flex-col h-[75vh] md:h-[calc(100vh-120px)] py-3">
                 {/* Chat Header */}
                 <div className="px-4 border-b flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -131,7 +131,7 @@ function ChatMessagePage() {
                     </div>
                 </div>
                 {/* Messages Area */}
-                <ScrollArea className="flex-1 p-4 h-[65vh]">
+                <ScrollArea className="flex-1 p-4 h-[50vh] md:h-[65vh]">
                     <div className="space-y-4">
                         {messages.map((message) => (
                             <div
