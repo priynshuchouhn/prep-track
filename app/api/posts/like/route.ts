@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import  prisma  from "@/lib/prisma";
 import { auth } from "@/auth";
 import { sendNotification } from "@/lib/notifications";
+import { getIO } from "@/lib/websocket";
 
 
 export async function POST(req: Request) {
@@ -63,9 +64,8 @@ export async function POST(req: Request) {
 
     if (post.userId !== userId) {
         // Fetch WebSocket instance
-        const io = (global as any).io;
+        const io = getIO();
         if (io) {
-          console.log("here");
           await sendNotification(io, post.userId, `${session.user.name} liked your post.`, "LIKE",);
         } else {
           // Save in database only if WebSocket is not available

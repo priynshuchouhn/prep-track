@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "@/lib/utils";
+import { API_BASE_URL, WS_BASE_URL } from "@/lib/utils";
 import { Notification } from "@prisma/client";
 import { io } from "socket.io-client";
 
@@ -16,10 +16,12 @@ import {
 import { Bell } from "lucide-react";
 import { Button } from "./button";
 import clsx from "clsx";
+import { useSession } from "next-auth/react";
 
 
 export default function Notifications() {
     const [notifications, setNotifications] = useState<Notification[]>([]);
+    const session = useSession();
     const [socket, setSocket] = useState<any>(null);
 
 
@@ -37,15 +39,26 @@ export default function Notifications() {
         fetchNotifications();
 
         // Set up WebSocket connection
-        const newSocket = io(API_BASE_URL);
+        const newSocket = io(`${WS_BASE_URL}`, {
+            transports: ["websocket", "polling"],
+            reconnectionAttempts: 5,
+            reconnectionDelay: 2000,
+        });
         setSocket(newSocket);
 
         newSocket.on("connect", () => {
-            console.log("Connected to WebSocket");
+            // console.log("Connected to WebSocket");
+            if (session.data?.user.id) {
+                // console.log(`🔹 Joining room: ${session.data?.user.id}`);
+                newSocket.emit("joinRoom", session.data?.user.id);
+            }
+        });
+
+        newSocket.on("connect_error", (error) => {
+            console.error("❌ WebSocket connection error:", error);
         });
 
         newSocket.on("newNotification", (notification) => {
-            console.log("websocket"+notification);
             setNotifications((prev) => [notification, ...prev]);
         });
 
@@ -56,7 +69,7 @@ export default function Notifications() {
             newSocket.disconnect();
             // clearInterval(interval);
         };
-    }, []);
+    }, [session.data?.user.id]);
 
     const markAsRead = async () => {
         try {
