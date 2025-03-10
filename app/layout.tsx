@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { WakeUpServer } from "@/components/ui/wakeup";
+import { API_BASE_URL } from "@/lib/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,11 +20,12 @@ export const metadata: Metadata = {
   description: "Track your placement preparation journey, share daily learning updates, and stay accountable with a community of students. Join Prep Track to boost your consistency and land your dream job.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await fetch(`${API_BASE_URL}/wakeup`);
   return (
     <html lang="en">
       <body

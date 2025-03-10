@@ -1,10 +1,12 @@
+import { WS_BASE_URL } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const WS_SERVER_URL = process.env.WS_BASE_URL || "";
+        const WS_SERVER_URL = process.env.WS_BASE_URL || WS_BASE_URL || "";
 
         // Ping WebSocket server to wake it up
+        console.log(WS_SERVER_URL);
         await fetch(WS_SERVER_URL, { method: "GET" });
 
         return NextResponse.json({ success: true, message: "WebSocket server pinged successfully." });

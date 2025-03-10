@@ -11,7 +11,6 @@ export const WakeUpServer = () => {
         const wakeUpAndConnect = async () => {
             try {
                 console.log("🚀 Waking up WebSocket server...");
-                await fetch("/api/wakeup");
 
                 console.log("🔌 Initializing WebSocket...");
                 initializeWebSocket(`${WS_BASE_URL}`, "");

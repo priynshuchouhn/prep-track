@@ -47,7 +47,6 @@ export async function GET() {
         const session = await auth(); // Get logged-in user
         if (!session || !session.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         const userId = session.user.id;
-        console.log(userId)
         if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
         const chats = await prisma.chat.findMany({
