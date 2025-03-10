@@ -62,8 +62,23 @@ export async function POST(req: Request) {
         const leaderboardId =  user.Leaderboard?.id;
 
         // Streak logic
+        // if (lastPostedAt) {
+        //     const diffInDays = Math.floor((now.getTime() - lastPostedAt.getTime()) / (1000 * 60 * 60 * 24));
+        //     if (diffInDays === 1) {
+        //         currentStreak += 1; // Continue the streak
+        //         longestStreak = Math.max(longestStreak, currentStreak);
+        //     } else if (diffInDays > 1) {
+        //         currentStreak = 1; // Reset streak
+        //     }
+        // } else {
+        //     currentStreak = 1; // First post
+        // }
+
         if (lastPostedAt) {
-            const diffInDays = Math.floor((now.getTime() - lastPostedAt.getTime()) / (1000 * 60 * 60 * 24));
+            const lastPostedDate = new Date(lastPostedAt.getFullYear(), lastPostedAt.getMonth(), lastPostedAt.getDate());
+            const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const diffInDays = Math.floor((nowDate.getTime() - lastPostedDate.getTime()) / (1000 * 60 * 60 * 24));
+        
             if (diffInDays === 1) {
                 currentStreak += 1; // Continue the streak
                 longestStreak = Math.max(longestStreak, currentStreak);
@@ -73,6 +88,7 @@ export async function POST(req: Request) {
         } else {
             currentStreak = 1; // First post
         }
+        
 
         postCount += 1; // Increment total post count
 
