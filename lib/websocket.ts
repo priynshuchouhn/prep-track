@@ -7,12 +7,13 @@ declare global {
 }
 
 let socket: Socket | null = null;
+let reconnectAttempts = 0;
 
 /**
  * Initialize WebSocket connection only once.
  * @param serverUrl The WebSocket server URL
  */
-export const initializeWebSocket = (serverUrl: string, userId:string) => {
+export const initializeWebSocket = (serverUrl: string, userId?:string) => {
     if (typeof window === "undefined") return; // Prevent running on server
 
     if (!window._socket) {
@@ -36,20 +37,22 @@ export const initializeWebSocket = (serverUrl: string, userId:string) => {
         socket.on("connect", () => console.log("🔗 WebSocket Connected:", socket?.id));
         socket.on("disconnect", (reason) => {
             console.log(`❌ WebSocket Disconnected. Reason: ${reason}`);
-
             if (reason === "transport close") {
                 console.warn("⚠️ Possible network issue or server stopped.");
             } else if (reason === "ping timeout") {
                 console.warn("⚠️ Server did not respond, connection lost.");
             }
-            //  else if (reason === "server namespace disconnect") {
-            //     console.warn("⚠️ Disconnected by the server.");
-            // } else if (reason === "forced close") {
-            //     console.warn("⚠️ Client manually disconnected.");
-            // }
              else {
                 console.warn("⚠️ Unknown disconnection reason:", reason);
             }
+
+            reconnectAttempts++;
+            const retryDelay = Math.min(5000 * reconnectAttempts, 30000);
+            console.log(`🔄 Reconnecting in ${retryDelay / 1000} seconds...`);
+
+            setTimeout(() => {
+                initializeWebSocket(serverUrl); // Reinitialize WebSocket
+            }, retryDelay);
         });
     } else {
         console.warn("⚠️ WebSocket is already initialized!");
