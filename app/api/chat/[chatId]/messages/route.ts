@@ -62,6 +62,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ chatId:
         return NextResponse.json({ status: 201 });
 
     } catch (error) {
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        console.log("[Send Message]"+error);
+        return NextResponse.json({ error: "Internal Server Error", data: error }, { status: 500 });
     }
 }
