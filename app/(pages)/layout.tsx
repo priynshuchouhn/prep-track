@@ -1,8 +1,8 @@
 import React from 'react'
-import Footer from '../components/footer'
 import LeftSidebar from '../components/left-sidebar'
 import RightSidebar from '../components/right-sidebar'
 import Navbar from '@/components/ui/nav-bar'
+import FooterWrapper from '../components/footer-wrapper'
 
 async function layout({ children }: { children: React.ReactNode }) {
     return (
@@ -22,7 +22,7 @@ async function layout({ children }: { children: React.ReactNode }) {
                         <RightSidebar />
                     </div>
                 </div>
-                <Footer/>
+                <FooterWrapper/>
             </div>
         </>
     )
