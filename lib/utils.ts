@@ -21,5 +21,16 @@ export function timeAgo(date:Date | string) {
   return `${diffInDays} days ago`;
 }
 
+export const slugify = (text: string) => {
+  return text
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-") // Replace spaces with -
+      .replace(/[^\w-]+/g, "") // Remove non-word characters
+      .replace(/--+/g, "-"); // Remove multiple -
+};
+
+
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export const WS_BASE_URL = process.env.NEXT_PUBLIC_WS_BASE_URL;
