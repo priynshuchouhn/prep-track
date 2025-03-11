@@ -3,7 +3,7 @@ import { Home, Search, User, MessageSquare, Settings, LogOut,  Trophy, HelpCircl
 import Link from "next/link";
 import AddPostButton from "@/components/ui/add-post-button";
 import { usePathname } from "next/navigation";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -13,7 +13,7 @@ const menuItems = [
     {
       icon: User,
       label: "Profile",
-      href: "/",
+      href: "/profile",
     },
     // {
     //   icon: Bell,
@@ -83,19 +83,20 @@ function Footer() {
                             </div>
                         </SheetTitle>
                     </SheetHeader>
-                    <div className="space-y-6">
+                    <div className="flex flex-col gap-2">
                         {menuItems.map((item) => (
-                            <Link key={item.label} href={item.href}>
-                                <Button
-                                    variant="ghost"
-                                    className="w-full justify-start text-lg hover:bg-muted"
-                                >
-                                    <item.icon className="mr-3 h-5 w-5" />
+                            <SheetClose asChild key={item.label}>
+                            <Link href={item.href} className="py-2">
+                                <Button variant="ghost" className="w-full justify-start text-lg hover:bg-muted">
+                                    <item.icon className="mr-3 h-7 w-7 text-xl" />
                                     {item.label}
                                 </Button>
                             </Link>
+                            </SheetClose>
                         ))}
+                        <div className="py-2">
                         <SignOutButton/>
+                        </div>
                     </div>
                 </SheetContent>
             </Sheet>

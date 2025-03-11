@@ -97,13 +97,11 @@ const recentPosts = [
 ];
 
 export default function ProfilePage() {
-    const [activeTab, setActiveTab] = useState("overview");
-    if (true) return null;
     return (
-        <div className="min-h-screen bg-background pt-16">
+        <div className="min-h-screen bg-background">
             {/* Header Section */}
-            <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 py-12">
-                <div className="container mx-auto px-4">
+            <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 py-12 md:rounded-2xl">
+                <div className="mx-auto px-4">
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
                         <Avatar className="h-24 w-24 border-4 border-background">
                             <Image
@@ -111,6 +109,7 @@ export default function ProfilePage() {
                                 alt="Profile"
                                 className="object-cover"
                                 width={500}
+                                height={500}
                             />
                         </Avatar>
                         <div className="flex-1">
@@ -125,7 +124,7 @@ export default function ProfilePage() {
                                         <span>Software Engineer</span>
                                     </div>
                                 </div>
-                                <div className="flex gap-2 md:ml-auto">
+                                {/* <div className="flex gap-2 md:ml-auto">
                                     <Button variant="outline" size="sm">
                                         <Mail className="h-4 w-4 mr-2" />
                                         Message
@@ -134,7 +133,7 @@ export default function ProfilePage() {
                                         <Users className="h-4 w-4 mr-2" />
                                         Follow
                                     </Button>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 <Badge variant="secondary">
@@ -156,8 +155,8 @@ export default function ProfilePage() {
             </div>
 
             {/* Main Content */}
-            <div className="container mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="mx-auto py-4">
+                <div className="">
                     {/* Left Sidebar */}
                     <div className="space-y-6">
                         <Card className="p-6">
@@ -177,16 +176,16 @@ export default function ProfilePage() {
                                 </div>
                                 <div className="pt-4 flex items-center gap-3">
                                     <a href="#" className="text-muted-foreground hover:text-foreground">
-                                        <Github className="h-5 w-5" />
+                                        <Github className="h-6 w-6" />
                                     </a>
-                                    <a href="#" className="text-muted-foreground hover:text-foreground">
-                                        <Linkedin className="h-5 w-5" />
+                                    <a href="#" className="text-indigo-900 hover:text-foreground">
+                                        <Linkedin className="h-6 w-6 " />
                                     </a>
                                 </div>
                             </div>
                         </Card>
 
-                        <Card className="p-6">
+                        {/* <Card className="p-6">
                             <h3 className="font-semibold mb-4">Statistics</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="p-4 bg-muted rounded-lg text-center">
@@ -206,12 +205,12 @@ export default function ProfilePage() {
                                     <div className="text-sm text-muted-foreground">Achievements</div>
                                 </div>
                             </div>
-                        </Card>
+                        </Card> */}
                     </div>
 
                     {/* Main Content */}
-                    <div className="md:col-span-2 space-y-6">
-                        <Card className="p-6">
+                    <div className="md:col-span-2 py-4 space-y-6">
+                        {/* <Card className="p-6">
                             <h3 className="font-semibold flex items-center gap-2 mb-4">
                                 <BarChart3 className="h-5 w-5" />
                                 Activity Overview
@@ -273,7 +272,7 @@ export default function ProfilePage() {
                                     </div>
                                 ))}
                             </div>
-                        </Card>
+                        </Card> */}
 
                         <Card className="p-6">
                             <h3 className="font-semibold flex items-center gap-2 mb-4">
@@ -282,10 +281,7 @@ export default function ProfilePage() {
                             </h3>
                             <div className="space-y-4">
                                 {recentPosts.map((post) => (
-                                    <div
-                                        key={post.id}
-                                        className="flex items-center gap-4 p-4 rounded-lg hover:bg-muted transition-colors"
-                                    >
+                                    <div key={post.id}  className="flex flex-col md:flex-row md:items-center gap-4 p-4 rounded-lg hover:bg-muted transition-colors border">
                                         <div className="flex-1">
                                             <h4 className="font-medium mb-1">{post.title}</h4>
                                             <div className="flex items-center gap-2 text-sm text-muted-foreground">

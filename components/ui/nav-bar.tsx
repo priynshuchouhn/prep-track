@@ -34,43 +34,45 @@ async function Navbar({ isHomePage = false }: { isHomePage?: boolean }) {
         {isHomePage ?
           <div className="flex items-center space-x-6">
             <div className='hidden md:block'>
-            <Link href="/chat">
+              <Link href="/chat">
                 <MessageSquare className="w-7 h-7 text-gray-700 hover:text-black" />
-            </Link>
+              </Link>
             </div>
-            <Notifications/>
+            <Notifications />
             <div className='hidden md:block'>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar className="h-8 w-8 cursor-pointer">
-                  <Image src={session?.user?.image || ""} alt="User" width={500} height={500} className="object-cover" />
-                  <AvatarFallback>
-                    {session?.user?.name?.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="h-8 w-8 cursor-pointer">
+                    <Image src={session?.user?.image || ""} alt="User" width={500} height={500} className="object-cover" />
+                    <AvatarFallback>
+                      {session?.user?.name?.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      <Link href={"/profile"}>
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      Settings
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    Profile
+                    <form action={async () => {
+                      'use server';
+                      await signOut({ redirectTo: '/' });
+                    }}>
+                      <button type='submit'>Log out</button>
+                    </form>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    Settings
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <form action={async () => {
-                    'use server';
-                    await signOut({ redirectTo: '/' });
-                  }}>
-                    <button type='submit'>Log out</button>
-                  </form>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div> : <nav className="flex gap-4">
             <Link href={'/login'}>

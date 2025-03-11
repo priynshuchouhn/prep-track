@@ -8,25 +8,44 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(uuid())
-  name         String
-  email        String         @unique
-  image        String?
-  role         Role           @default(STUDENT)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  lastPostedAt DateTime?
-  password     String
-  chatsAsUser1 Chat[]         @relation("ChatUser1")
-  chatsAsUser2 Chat[]         @relation("ChatUser2")
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  image         String?
+  role          Role           @default(STUDENT)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  lastPostedAt  DateTime?
+  password      String
+  chatsAsUser1  Chat[]         @relation("ChatUser1")
+  chatsAsUser2  Chat[]         @relation("ChatUser2")
   comments      Comment[]
-  leaderboard  Leaderboard?
+  leaderboard   Leaderboard?
   likes         Like[]
   messages      Message[]
   notifications Notification[]
-  posts        Post[]
-  reminder     Reminder?
-  streak       Streak?
+  posts         Post[]
+  reminder      Reminder?
+  streak        Streak?
+  UserDetail    UserDetail?
+}
+
+model UserDetail {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  about    String?
+  github   String? @unique
+  linkedin String? @unique
+  website  String? @unique
+
+  skills     String[]
+  education  String?
+  experience String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Post {
@@ -37,8 +56,8 @@ model Post {
   updatedAt DateTime  @updatedAt
   slug      String    @unique
   tags      String[]
-  comments   Comment[]
-  likes      Like[]
+  comments  Comment[]
+  likes     Like[]
   user      User      @relation(fields: [userId], references: [id])
   postTag   PostTag[]
 }

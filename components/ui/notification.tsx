@@ -87,7 +87,7 @@ export default function Notifications() {
                     {notifications.filter(el => el.read != true) && notifications.filter(el => el.read != true).length > 0 && <div className="absolute w-5 h-5 flex items-center text-xs -top-2 -right-2 justify-center text-white bg-sky-700 rounded-full">{notifications.filter(el => el.read != true).length}</div>}
                     </div>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="min-w-md">
+                <DropdownMenuContent className="min-w-screen lg:min-w-md">
                     <DropdownMenuLabel>
                         <div className="flex items-center justify-between">
                             <span className="text-lg font-bold">Notification</span>
