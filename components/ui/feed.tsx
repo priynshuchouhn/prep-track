@@ -1,11 +1,11 @@
 import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Like, Post, Tag, User } from '@prisma/client';
+import { Comment, Like, Post, Tag, User } from '@prisma/client';
 import { API_BASE_URL, timeAgo } from '@/lib/utils';
 import axios from 'axios';
 import PostCard from './post-card';
 
-export type FeedPost = Post & {user:User, tags: Tag[], Like: Like[]}
+export type FeedPost = Post & {user:User, tags: Tag[], likes: Like[], comments: (Comment & {user: User})[]}
 
 async function Feed() {
     const res = await axios.get(`${API_BASE_URL}/posts`)

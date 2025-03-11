@@ -49,30 +49,7 @@ export async function POST(req: Request) {
       data: { userId, postId },
     });
 
-    // Create notification for the post owner (if not the same user)
-    // if (post.userId !== userId) {
-    //   await prisma.notification.create({
-    //     data: {
-    //       userId: post.userId, // Notify post owner
-    //       type: "LIKE",
-    //       message: `${session.user.name} liked your post.`,
-    //     },
-    //   });
-
-    // }
-
     await sendNotification(post.userId, `${session.user.name} liked your post.`, "LIKE",);
-    // if (post.userId !== userId) {
-    //     // Fetch WebSocket instance
-    //     const io = getIO();
-    //     if (io) {
-    //     } else {
-    //       // Save in database only if WebSocket is not available
-    //       await prisma.notification.create({
-    //         data: { userId: post.userId, message: `${session.user.name} liked your post.`,type: "LIKE", read: false },
-    //       });
-    //     }
-    //   }
 
     return NextResponse.json({ message: "Post liked", liked: true });
   } catch (error) {

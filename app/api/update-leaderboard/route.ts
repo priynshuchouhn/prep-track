@@ -6,17 +6,17 @@ export async function GET() {
         const users = await prisma.user.findMany({
             include: {
                 posts: { select: { id: true } },
-                Like: { select: { id: true } },
-                Comment: { select: { id: true } },
-                Streak: { select: { currentStreak: true } },
+                likes: { select: { id: true } },
+                comments: { select: { id: true } },
+                streak: { select: { currentStreak: true } },
             },
         });
 
         const leaderboardUpdates = users.map(user => {
             const postCount = user.posts.length;
-            const likeCount = user.Like.length;
-            const commentCount = user.Comment.length;
-            const currentStreak = user.Streak?.currentStreak || 0;
+            const likeCount = user.likes.length;
+            const commentCount = user.comments.length;
+            const currentStreak = user.streak?.currentStreak || 0;
 
             const newScore = (postCount * 10) + (likeCount * 2) + (commentCount * 3) + (currentStreak * 5);
 

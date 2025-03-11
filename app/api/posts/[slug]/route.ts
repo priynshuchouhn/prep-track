@@ -18,8 +18,8 @@ export async function GET(req: NextRequest, {params}: {params: Promise<{slug:str
                         password: false
                     }
                 },
-                Like:true,
-                Comment: true
+                likes:true,
+                comments: true
             }
         });
         revalidatePath('/posts/[slug]', 'page');

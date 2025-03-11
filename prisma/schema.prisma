@@ -19,14 +19,14 @@ model User {
   password     String
   chatsAsUser1 Chat[]         @relation("ChatUser1")
   chatsAsUser2 Chat[]         @relation("ChatUser2")
-  Comment      Comment[]
-  Leaderboard  Leaderboard?
-  Like         Like[]
-  Message      Message[]
-  Notification Notification[]
+  comments      Comment[]
+  leaderboard  Leaderboard?
+  likes         Like[]
+  messages      Message[]
+  notifications Notification[]
   posts        Post[]
-  Reminder     Reminder?
-  Streak       Streak?
+  reminder     Reminder?
+  streak       Streak?
 }
 
 model Post {
@@ -37,10 +37,10 @@ model Post {
   updatedAt DateTime  @updatedAt
   slug      String    @unique
   tags      String[]
-  Comment   Comment[]
-  Like      Like[]
+  comments   Comment[]
+  likes      Like[]
   user      User      @relation(fields: [userId], references: [id])
-  PostTag   PostTag[]
+  postTag   PostTag[]
 }
 
 model Reminder {

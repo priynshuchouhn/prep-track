@@ -44,19 +44,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ chatId:
         if(!chat) return NextResponse.json({ error: "Chat not found" }, { status: 400 });
         const receiverId = chat?.user1Id ==  userId ? chat?.user2Id : chat?.user1Id
         await sendMessage(chatId, userId, receiverId, content);
-        // const io = getIO();
-        // if (io) {
-        // } else {
-        //     // Save in database only if WebSocket is not available
-        //     const message = await prisma.message.create({
-        //         data: {
-        //             content,
-        //             senderId: userId,
-        //             chatId: chatId
-        //         }
-        //     });
-        // }
-
+    
         revalidatePath('/chat/[chatId]', 'page');
         return NextResponse.json({ status: 201 });
 

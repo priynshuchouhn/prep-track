@@ -23,8 +23,19 @@ export async function GET(req: NextRequest) {
                         password: false
                     }
                 },
-                Like:true,
-                Comment: true
+                likes:true,
+                comments: {
+                    include: {
+                        user: {
+                            select: {
+                                name: true,
+                                email: true,
+                                image: true,
+                                password: false
+                            }
+                        }
+                    }
+                }
             }
         });
         revalidatePath('/', 'page');
@@ -62,7 +73,7 @@ export async function POST(req: Request) {
     try {
         const user = await prisma.user.findUnique({
             where: { id: userId },
-            include: { Streak: true, Leaderboard: true },
+            include: { streak: true, leaderboard: true },
         });
 
         if (!user) {
@@ -75,10 +86,10 @@ export async function POST(req: Request) {
         });
         
         const lastPostedAt = user.lastPostedAt ? new Date(user.lastPostedAt) : null;
-        let currentStreak = user.Streak?.currentStreak || 0;
-        let longestStreak = user.Streak?.longestStreak || 0;
-        let postCount = user.Leaderboard?.postCount || 0;
-        const leaderboardId = user.Leaderboard?.id;
+        let currentStreak = user.streak?.currentStreak || 0;
+        let longestStreak = user.streak?.longestStreak || 0;
+        let postCount = user.leaderboard?.postCount || 0;
+        const leaderboardId = user.leaderboard?.id;
 
         if (lastPostedAt) {
             const lastPostedDate = new Date(lastPostedAt.getFullYear(), lastPostedAt.getMonth(), lastPostedAt.getDate());
