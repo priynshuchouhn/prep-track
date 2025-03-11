@@ -48,8 +48,9 @@ export async function POST(req: Request) {
     await prisma.like.create({
       data: { userId, postId },
     });
-
-    await sendNotification(post.userId, `${session.user.name} liked your post.`, "LIKE",);
+    if(post.userId !== session.user.id){
+      await sendNotification(post.userId, `${session.user.name} liked your post.`, "LIKE",);
+    }
 
     return NextResponse.json({ message: "Post liked", liked: true });
   } catch (error) {

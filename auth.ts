@@ -29,7 +29,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
-          include: {Leaderboard: true, Streak:true}
+          include: {leaderboard: true, streak:true}
         });
         if (!user) {
           console.log("User not found");
@@ -46,8 +46,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           image: user.image || null,
           role: user.role,
-          postCount: user.Leaderboard?.postCount || 0,
-          currentStreak: user.Streak?.currentStreak || 0
+          postCount: user.leaderboard?.postCount || 0,
+          currentStreak: user.streak?.currentStreak || 0
         } as User;
       }
     })

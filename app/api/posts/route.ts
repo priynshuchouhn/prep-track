@@ -114,6 +114,7 @@ export async function POST(req: Request) {
                 data: {
                     content,
                     slug,
+                    tags,
                     userId,
                 },
             });
