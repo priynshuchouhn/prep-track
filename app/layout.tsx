@@ -4,6 +4,7 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { WakeUpServer } from "@/components/ui/wakeup";
 import { API_BASE_URL } from "@/lib/utils";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,9 +29,8 @@ export default async function RootLayout({
   await fetch(`${API_BASE_URL}/wakeup`);
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Toaster position="top-center" />
         <WakeUpServer/>
         <SessionProvider>
         {children}

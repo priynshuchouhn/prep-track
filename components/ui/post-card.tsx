@@ -5,20 +5,22 @@ import { Avatar } from './avatar';
 import { Button } from './button';
 import { Bookmark, Heart, MessageSquare, Share2 } from 'lucide-react';
 import Image from 'next/image';
-import { API_BASE_URL, timeAgo } from '@/lib/utils';
+import { API_BASE_URL, APP_BASE_URL, timeAgo } from '@/lib/utils';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { FeedPost } from './feed';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 function PostCard({ post }: { post: FeedPost }) {
     const session = useSession();
     const router = useRouter();
     const [liked, setLiked] = useState(false);
+    const postUrl = `${APP_BASE_URL}posts/${post.slug}`
     useEffect(()=>{
         setLiked(post.Like.findIndex(el => el.userId == session.data?.user.id)> -1)
-    },[session?.data?.user.id])
+    },[post.Like, session.data?.user.id])
     const toggleLike = async () => {
         try {
             const res = await axios.post(`${API_BASE_URL}/posts/like`, { postId: post.id });
@@ -28,6 +30,33 @@ function PostCard({ post }: { post: FeedPost }) {
             console.error("Error liking/unliking post:", error);
         }
     };
+
+    const handleCopyLink = async () => {
+        try {
+          await navigator.clipboard.writeText(postUrl);
+          toast.success("Link copied to clipboard! 📋");
+        } catch (error) {
+          toast.error("Failed to copy link! ❌");
+        }
+      };
+    
+      const handleShare = async () => {
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: "Check out this post!",
+              url: postUrl,
+            });
+          } catch (error:any) {
+            if (error && error.name && error.name !== "AbortError") {
+                // Only show toast if the error is NOT due to user canceling the share
+                toast.error("Error sharing the post! ❌");
+              }
+          }
+        } else {
+          handleCopyLink(); // Fallback to copy if native sharing isn't available
+        }
+      };
     return (
         <Card className="p-2 md:p-6">
             <div className="flex items-center space-x-4 mb-4">
@@ -55,7 +84,7 @@ function PostCard({ post }: { post: FeedPost }) {
                     <MessageSquare className="h-6 w-6 mr-2" />
                     {/* {post.comments} */}
                 </Button>
-                <Button variant="ghost" size="lg">
+                <Button variant="ghost" size="lg" onClick={handleShare}>
                     <Share2 className="h-6 w-6 mr-2" />
                     <span className="hidden md:block">Share</span>
                 </Button>
