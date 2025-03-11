@@ -74,7 +74,7 @@ function PostCard({ post }: { post: FeedPost }) {
     const handleCommentSubmit = async (data: PostCommentData) => {
         try {
             setLoading(true);
-            await axios.post(`${API_BASE_URL}/comments`, data);
+            await axios.post(`${API_BASE_URL}/posts/comment`, data);
             reset();
             router.refresh();
           } catch (error) {

@@ -23,12 +23,6 @@ export async function sendMessage(chatId: string, senderId: string, receiverId: 
       }
     });
 
-    // // Check if receiver is online
-    // const receiverSocket = io.sockets.adapter.rooms.get(receiverId);
-    // if (receiverSocket && receiverSocket.size > 0) {
-    //   io.to(receiverId).emit("newMessage", message);
-    // }
-    // io.to(senderId).emit("newMessage", message);
     try {
       await axios.post(`${WS_BASE_URL}/send-message`, {
         senderId,

@@ -16,11 +16,6 @@ export async function sendNotification(userId: string, message: string, type: No
       },
     });
 
-    // Check if the user is connected
-    // const userSocket = io.sockets.adapter.rooms.get(userId); // Get active user connection
-    // if (userSocket && userSocket.size > 0) {
-    //   io.to(userId).emit("newNotification", notification);
-    // }
     try {
       await axios.post(`${WS_BASE_URL}/send-notification`, {
         userId,
